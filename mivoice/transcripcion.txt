@@ -1,0 +1,5696 @@
+00:00
+y esperar quieres aprender a programar
+00:02
+una arquitectura de deep learning que te
+00:04
+permita coger una imagen como esta y que
+00:07
+a partir de ella te genera una imagen de
+00:08
+una flor realista como esta quieres
+00:11
+aprender una arquitectura llamada picks
+00:12
+tópix y que debería ser ya por todos
+00:14
+conocidos que te permite resolver
+00:15
+múltiples problemas en los que cogemos
+00:17
+una imagen de entrada y la convertimos
+00:19
+en otra cosa un tipo de modelo que
+00:21
+realmente se podría aplicar a múltiples
+00:23
+otros problemas como coger un mapa de
+00:25
+segmentación y convertirlo en una imagen
+00:26
+realista una imagen en blanco y negro a
+00:28
+una imagen a color una imagen de un
+00:30
+estilo a otro estilo una imagen de
+00:32
+bordes a un objeto etcétera múltiples
+00:35
+problemas
+00:36
+todo esto lo podemos conseguir con un
+00:37
+modelo que ya vimos en el vídeo anterior
+00:39
+de disney y que es el modelo picks tópix
+00:42
+o su variante más avanzada en modelo
+00:43
+picks topics hd en este caso en el
+00:46
+tutorial de hoy les voy a dar la
+00:47
+oportunidad de que ustedes implementen
+00:49
+desde cero y utilizando tensor flow 2.0
+00:51
+vuestro propio modelo y no sólo eso sino
+00:54
+que también si está viendo este tutorial
+00:56
+durante el verano de 2019 este tutorial
+00:58
+te va a dar el conocimiento suficiente
+01:00
+para que puedas participar en esta
+01:02
+competición de aquí que saque un vídeo
+01:03
+que creo que muy poca gente vio porque
+01:05
+lo subí justamente el día
+01:06
+youtube fallo en el que podrás ganarte
+01:08
+gracias a dotes sv a este canal la
+01:11
+envidia que me ha facilitado una tarjeta
+01:13
+gráfica 2080 super para sortear en una
+01:16
+competición en la que tendrás que usar
+01:17
+el modelo picks tópix de alguna manera
+01:19
+creativa original de impacto etcétera
+01:22
+tenéis todos los detalles en aquel vídeo
+01:24
+que publiqué hace unas tres semanas y
+01:26
+esta competición estará abierta hasta el
+01:28
+día 14 de septiembre por la noche así
+01:30
+que tal vez tienes tiempo para aprender
+01:32
+y participar
+01:33
+dicho esto comenzamos con el tutorial
+01:37
+[Música]
+01:40
+un par de apuntes este tutorial es un
+01:42
+tutorial largo que casi dura dos horas y
+01:45
+en el que vamos a estar programando pues
+01:47
+cosas de cierta complejidad vale te
+01:49
+indico que sería muy buena idea que te
+01:51
+vieras antes de ver este vídeo el vídeo
+01:53
+en el que hablábamos de deep news que
+01:55
+básicamente es un vídeo en el que de
+01:56
+manera encubierta me paso 30 minutos
+01:58
+hablándote del modelo picks tu picks a
+02:00
+nivel conceptual a partir de ahí también
+02:02
+podría ser una buena idea que echara un
+02:04
+vistazo al paper de este modelo y con
+02:06
+eso ya tendrías todos los conceptos
+02:08
+teóricos y los conceptos intuitivos de
+02:10
+lo que vamos a trabajar hoy en este caso
+02:12
+para este tutorial le buscado un
+02:13
+problema muy sencillo a resolver porque
+02:15
+no quiero pues solapar me con cualquier
+02:17
+proyecto que realmente vaya a ser
+02:18
+presentado a esta competición así que el
+02:21
+proyecto que buscado ha sido el de
+02:22
+intentar generar imágenes de flores
+02:24
+realistas a partir de una imagen dada
+02:27
+como entrada que es la que va a
+02:28
+condicionar a nuestra red en la que pues
+02:30
+se ve una especie de boceto
+02:33
+desenfocado o una imagen de bajo nivel
+02:35
+de poco detalle de lo que sería la flor
+02:38
+que queremos generar un poco con la idea
+02:40
+de que yo pueda tener una especie de
+02:41
+lienzo donde yo pueda dibujar una flor
+02:44
+un poco mal hecha y gracias a nuestros
+02:46
+pues podemos generar una imagen más
+02:48
+realista de ello como ya saben el modelo
+02:50
+picks tópix es lo suficientemente
+02:51
+versátil como para aplicarse a muchos
+02:53
+problemas diferentes con lo cual si no
+02:55
+quieren trabajar con el tratarse de
+02:56
+flores que les facilitó aquí abajo pues
+02:58
+pueden probar con cualquier otro tipo de
+03:00
+auto diferente y probar a solucionar un
+03:02
+problema que a ustedes les puede
+03:04
+interesar más yo creo que esa es una
+03:06
+buena forma de aprender el coger lo que
+03:08
+yo les explico y adaptarlo a vuestras
+03:10
+necesidades con lo cual pues lo único
+03:12
+que les puedo desear ahora es que
+03:14
+disfruten de la programación dentro
+03:16
+tutorial ah por cierto si valoras este
+03:18
+tipo de contenido formativo gratuito the
+03:20
+machine learning en youtube
+03:21
+quizás sería un buen momento para
+03:22
+replantear te hacerte patrón de este
+03:24
+canal y apoyarlos financieramente te has
+03:26
+comido y el spam perfecto dentro
+03:28
+tutorial lo primero que quería comentar
+03:30
+es que el tutorial que vamos a hacer hoy
+03:32
+va a estar basado en la librería tensor
+03:34
+flow y más específicamente en la versión
+03:36
+2.0 si todo esto de tensor flow que eras
+03:41
+tyson y todas estas librerías que
+03:44
+conforman el ecosistema de machine
+03:46
+learning te suenan pero no sabes que te
+03:48
+aporta cada una te recomiendo que veas
+03:50
+el vídeo que está saliendo ahora aquí
+03:51
+arriba que básicamente fue un vídeo que
+03:54
+preparé de cara a todos estos tutoriales
+03:56
+en los que vamos a empezar a utilizar
+03:57
+estas herramientas y donde te explico un
+03:59
+poco que te aporta cada una
+04:01
+en este caso como he dicho vamos a
+04:02
+utilizar tensor flow la versión 2.0 que
+04:05
+es una versión que todavía está en fase
+04:07
+beta y veremos un poquito también cuáles
+04:11
+son los beneficios que aporta utilizar
+04:13
+esta versión y por qué la vamos a seguir
+04:15
+utilizando de cara al futuro en ese
+04:18
+sentido en la documentación de tensor
+04:20
+flow y es importante mencionarlo ya
+04:22
+existe una implementación del modelo
+04:24
+picks tópix del cual vamos a hacer el
+04:26
+tutorial hoy
+04:27
+de hecho el código que yo lo voy a
+04:29
+explicar no es un código que yo había
+04:30
+implementado desde cero sino que yo he
+04:32
+venido a la documentación me encontrado
+04:34
+con el modelo y voy a adaptar todo este
+04:36
+tutorial a este código
+04:37
+esto significa pues dos cosas uno que el
+04:40
+código no es mío
+04:42
+yo lo he cogido y lo he adaptado un poco
+04:45
+a las necesidades de mi problema y un
+04:47
+poco a este tutorial simplificando
+04:49
+algunas cosas pero casi todo está
+04:52
+conservado como el código original y lo
+04:55
+segundo es que si de repente tú estabas
+04:56
+esperando por este tutorial para poder
+04:59
+trabajar en el proyecto de cara a la
+05:00
+competición pues que sepas que
+05:01
+directamente aquí te pueden venir y
+05:04
+abrirte un google collage un notebook y
+05:07
+ya tienes el código ya hecho que no
+05:09
+tienes que tampoco estar implementando
+05:11
+los de terceros si no es tú si no es tu
+05:13
+caso a ver yo recomiendo que lo hagas
+05:15
+porque vamos a aprender bastante pero
+05:16
+siempre es bueno decirlo vale aquí lo
+05:18
+aplican al data set de las fachadas que
+05:21
+también es un problema muy interesante
+05:23
+en el que tú planteas una segmentación
+05:24
+de una fachada y el sistema pues aprende
+05:27
+a generarte fachadas realistas que
+05:30
+respeten más o menos la distribución que
+05:32
+pueda especificado dicho esto vamos a
+05:35
+comenzar a ver cuándo vamos a afrontar
+05:37
+este proyecto lo primero que tienes que
+05:39
+plantear es qué problema quiere resolver
+05:41
+yo en mi caso como ya ha explicado voy a
+05:45
+utilizar un data set de flores
+05:47
+la lo que vamos a buscar es intentar
+05:49
+resolver un problema en el que yo le
+05:50
+paso una foto de entrada de una flor muy
+05:54
+bien especificada de manera muy borrosa
+05:57
+muy simplona sin detalles como lo que
+05:59
+podría ser el resultado de un dibujo mal
+06:01
+hecho en photoshop y la idea es que el
+06:03
+sistema aprenda a partir de esa imagen a
+06:05
+generar una imagen un poco más realista
+06:07
+para eso pues lo primero que tenemos que
+06:09
+hacer es generar ese data set yo en mi
+06:12
+caso pues he buscado en internet me
+06:14
+encontrado un data set muy grande de
+06:17
+flores en este caso son pues unas 8000
+06:19
+imágenes de flores como pueden ver de
+06:23
+diferentes tipos colores formas con
+06:26
+diferentes fondos fondos azules fondos
+06:28
+verdes y a partir de estas imágenes lo
+06:31
+que he hecho ha sido para procesarlas
+06:33
+para obtener lo que serían mis imágenes
+06:35
+de entradas en este caso el proceso que
+06:37
+yo he seguido para procesar estas
+06:39
+imágenes pues ha sido utilizar photoshop
+06:41
+porque es una herramienta con la que yo
+06:43
+me siento cómodo y básicamente
+06:45
+especificado una serie de efectos que
+06:47
+quiero que se vaya aplicando a cada una
+06:48
+de las
+06:49
+para que conozca de photoshop sabrá que
+06:51
+hay una herramienta que son las acciones
+06:53
+que lo que le permite automatizar una
+06:55
+serie de pasos que quieres que se
+06:57
+aplique sobre una imagen grabas todos
+06:59
+esos pasos y luego lo puedes aplicar en
+07:01
+lotes a una carpeta entera pues
+07:04
+básicamente es lo que he hecho he
+07:05
+aplicado efectos de desenfoque de póster
+07:08
+y zación que lo que hace es eliminar
+07:09
+detalles de saturación de los verdes
+07:11
+para que por ejemplo los fondos los
+07:13
+convierta a negro desenfoque gaussianos
+07:16
+y desenfoque de superficie una serie de
+07:19
+efectos que lo que hace es que me da
+07:22
+está set de flores estas que yo me
+07:24
+descargado y del cual tenéis el link en
+07:26
+la descripción pues se conviertan en
+07:28
+este tipo de flores vale
+07:32
+básicamente pues esto sería el input que
+07:35
+nosotros le vamos a dar a nuestra red
+07:36
+generadora para condicionar el resultado
+07:39
+que tiene que generar si todo va bien
+07:41
+pues yo ya simplemente generando una
+07:44
+imagen tal que así o una imagen tal que
+07:47
+así pues puedo tener como resultado una
+07:50
+imagen realista de lo que sería una flor
+07:53
+con esto básicamente ya tendría generado
+07:57
+mis dos carpetas ignoren las que no las
+08:00
+que no son ni esta ni ésta pero bueno
+08:03
+con esto ya me puede generado mi carpeta
+08:05
+de datos con las que voy a empezar a
+08:07
+trabajar
+08:08
+esta es una diferencia de cara al código
+08:11
+original y es que en el código original
+08:12
+solamente utilizaban una carpeta con las
+08:14
+dos imágenes concatenadas en una sola
+08:18
+imagen y en mi caso me lo general dos
+08:19
+directorios diferentes por comodidad y
+08:23
+el único detalle es que en ambos
+08:25
+directorios cada par de imágenes pues
+08:27
+tienen que conservar el mismo nombre en
+08:29
+este caso por ejemplo email 0 0 0 0 0 0
+08:32
+0 1 punto jpg pues sería el equivalente
+08:36
+a estar aquí sería la misma imagen y
+08:38
+conservar el mismo nombre como se puede
+08:41
+ver
+08:42
+qué hago con todo esto pues con todo
+08:44
+esto la idea ahora es empezar a trabajar
+08:46
+en el código para programar lo que vamos
+08:49
+a utilizar es el entorno de programación
+08:51
+de google colar vale ya lo hemos
+08:53
+utilizado en otros tutoriales y hoy creo
+08:55
+que es más importante que nunca pues
+08:57
+comentar un par de detalles a ver como
+08:59
+ya saben google colab es esta
+09:00
+herramienta que nos ofrece google que
+09:01
+nos permite crear cuadernos donde poder
+09:05
+programar código de payton y donde este
+09:08
+código va a estar ejecutado no en
+09:10
+nuestro ordenador no en el ordenador que
+09:12
+estés utilizando sino en infraestructura
+09:15
+que google te deja gratis esta
+09:17
+infraestructura y vamos a hacerlo ya si
+09:19
+venimos aquí entorno de ejecución pues
+09:22
+vamos a cambiar tipo de entorno de
+09:23
+ejecución podemos ver que podemos
+09:26
+utilizar lo que sería una máquina
+09:28
+virtual normal con ejecución sobre cpu o
+09:30
+podemos ejecutar nuestro código sobre
+09:33
+gpu o incluso sobre temas que son los
+09:37
+tensos el proceso de liu ning
+09:39
+para este problema por ejemplo que vamos
+09:41
+a estar trabajando con imágenes es muy
+09:42
+importante tener activada el
+09:44
+procesamiento en gpu porque si no el
+09:47
+baile muy muy lento como digo esta
+09:50
+infraestructura google nos la ofrece
+09:51
+gratis y esto es muy cómodo porque nos
+09:54
+va a permitir por ejemplo que cualquiera
+09:56
+pueda programarlo ya esté utilizando un
+09:58
+súper ordenador de la nasa o si está en
+10:00
+el ordenador de la biblioteca del pueblo
+10:02
+porque porque no estás trabajando sobre
+10:04
+tu ordenador estás trabajando en la nube
+10:06
+esto está bien pero por ejemplo para
+10:09
+este tipo de problemas el que vamos a
+10:11
+resolver hoy tiene unas cuantas
+10:12
+limitaciones y es que efectivamente
+10:13
+google para evitar que la gente abuse de
+10:15
+esta herramienta pues pone una serie de
+10:17
+limitaciones técnicas que por ejemplo te
+10:21
+dicen que cada 12 horas la máquina
+10:23
+virtual sobre la que estés trabajando se
+10:24
+va a reiniciar y se va a borrar todos
+10:27
+los datos que tengas con lo cual tienes
+10:28
+que buscarte un método en el que
+10:31
+los datos se han guardado de manera
+10:33
+persistente fuera de esta máquina
+10:35
+virtual y también cada 90 minutos de
+10:38
+inactividad también te va a desconectar
+10:40
+con lo cual esto es un poco collazo y mi
+10:43
+recomendación es que si tienes un
+10:45
+ordenador medianamente potente no digo
+10:47
+nada avanzado sino algo una tarjeta
+10:49
+gráfica una 1080 una algo que te permita
+10:52
+trabajar un medianamente bien pues te
+10:56
+recomiendo que trabajes mejor en local
+10:58
+porque el entrenamiento que vamos a
+11:01
+hacer va a requerir de unas cuantas
+11:03
+horas y a veces es bastante coñazo que
+11:06
+te estén echando de la máquina virtual
+11:07
+cada cierto tiempo y eso es básicamente
+11:11
+mi consejo yo he tenido bastantes
+11:12
+problemas probando en google collapse
+11:14
+pero bueno aún así el tutorial lo quiero
+11:15
+hacer en este entorno más que nada para
+11:17
+que todo el mundo pueda enfrentarse como
+11:19
+digo independientemente del tipo de
+11:20
+ordenador que tengas dicho esto vamos a
+11:22
+ver entonces cómo vamos a trabajar con
+11:24
+google collapse y qué
+11:26
+truco vamos a utilizar pues para
+11:28
+trabajar de manera más cómoda como digo
+11:30
+cada 12 horas nos van a borrar todos los
+11:32
+datos que tenemos en la máquina virtual
+11:33
+así que tenemos que buscar algún método
+11:36
+cómodo que nos permita trabajar con
+11:39
+nuestros datos porque imagínate que tú
+11:40
+subes todo tu data se te va a tardar un
+11:42
+rato va a tardar mucho tiempo en subirse
+11:45
+a la nube y que cada 12 horas te lo
+11:47
+vayan borrando cómo sorteamos eso pues
+11:50
+miren el truco
+11:52
+mejor consejo que les puedo dar es que
+11:54
+el directorio de datos en nuestro caso
+11:57
+nuestra carpeta input flowers y target
+11:59
+flowers el imputado del módulo generador
+12:02
+pues yo si se fijan lo tengo guardado en
+12:05
+google drive que básicamente este
+12:07
+sistema de almacenamiento de google al
+12:09
+estilo de dropbox con lo cual pues todos
+12:12
+mis datos los tengo subidos en la nube
+12:14
+en la nube de google pero no es el
+12:15
+google colapsó servicios completamente
+12:18
+diferentes que pasan esto te va a tardar
+12:21
+en subir un rato pero una vez lo tenga
+12:23
+ha subido esto sé que no te lo van a
+12:24
+borrar porque esto tuvo el drive
+12:26
+personal y lo bueno es que aquí el
+12:28
+google colapsa viendo que este es un
+12:30
+método que se utiliza frecuentemente
+12:32
+pues te da la opción de poder activar tu
+12:34
+drive
+12:35
+cuando le das a este botón te sale aquí
+12:38
+ya una celda de código que básicamente
+12:40
+si la ejecutamos
+12:42
+para ejecutar controles internos
+12:44
+acuérdense te dicen vale meta esta url
+12:46
+en el navegador la abres tienes que
+12:50
+iniciar sesión con tu google drive y
+12:52
+entonces te van a dar un código porque
+12:55
+básicamente el código de autentificación
+12:56
+o de autorización que necesitas para que
+12:59
+se conecte en ambos servicios lo pones
+13:01
+aquí y entonces lo que está haciendo
+13:03
+ahora es que dentro de tu máquina
+13:04
+virtual dentro del ordenador que google
+13:07
+te sede pues está creando un directorio
+13:08
+que se va a llamar google drive y que
+13:10
+básicamente es una conexión que se hace
+13:13
+a tu servicio de web drive con lo cual
+13:15
+ya podrás acceder desde el código que
+13:17
+programa es aquí todos los datos que
+13:18
+tengas almacenados en google drive vale
+13:21
+si vienen aquí vamos a drive my drive
+13:24
+dentro de esta carpeta tengo el flower
+13:27
+state y aquí como vemos tengo todas mis
+13:30
+flores que creo que al abrir esto ahora
+13:32
+se va a trabar todo porque son
+13:33
+demasiadas flores con lo cual pues ya
+13:35
+tenemos todo listo para empezar a
+13:37
+conectar y a cargar todos nuestros datos
+13:39
+a nuestro sistema el primer paso una vez
+13:41
+tenemos ya conectado el google drive
+13:43
+pues va a ser generar todo este código
+13:45
+toda la todo el sistema que se va a
+13:47
+encargar de carga
+13:48
+dato 2 pre procesarlos convertirte los
+13:51
+lotes y suministrarlo pues a la
+13:54
+arquitectura que vamos a diseñar
+13:55
+posteriormente entonces esto lo vamos a
+13:57
+hacer un poco rápido porque tampoco es
+13:59
+tan importante de cara al tutorial y
+14:02
+vamos a empezar pues importando las
+14:04
+librerías tensor flow que es la librería
+14:08
+my in learning vamos a importar marc
+14:10
+clotet leaf que en la visualización de
+14:13
+datos y que lo vamos a utilizar para
+14:14
+visualizar las imágenes importamos la
+14:16
+anp y como ya saben en la librería de
+14:17
+cabecera para trabajar con matrices y
+14:20
+vectores vale después de esto vamos a
+14:25
+definir en variables las rutas donde
+14:27
+están nuestros datos para eso vamos a
+14:29
+venir aquí a nuestro sistema de archivos
+14:31
+y con el botón secundario pues vamos a
+14:33
+copiar la ruta donde está alojada la
+14:34
+carpeta raíz que contiene input flowers
+14:37
+y target flowers y esta la vamos a
+14:39
+guardar pues en una variable como por
+14:41
+ejemplo podría ser paz
+14:43
+hay que ponerlo entre comillas porque si
+14:45
+no nos va a dar problemas
+14:47
+vale con esto tenemos la ruta
+14:51
+ruth a raíz
+14:53
+luego podemos coger y también definir
+14:56
+pues la ruta donde tenemos la tanto de
+14:59
+entrada rutas de datos de entrada que en
+15:03
+este caso sería pues vamos a llamarle en
+15:05
+paz que sería la ruta raíz más como se
+15:09
+llama la carpeta
+15:11
+input flowers esto por un lado vamos a
+15:15
+copiar esta vamos a hacer otra también
+15:17
+ruta de datos de salida que en este caso
+15:20
+sería
+15:22
+target flowers y le vamos a llamar a
+15:25
+esta ruta
+15:27
+hay paz y también otra donde vamos a
+15:30
+guardar
+15:30
+vamos a ir guardando los avances según
+15:32
+vayamos entrenando a nuestra red
+15:33
+vamos a ir guardando una serie de check
+15:35
+points para que si en caso de que el
+15:37
+sistema falle pues
+15:39
+podamos recuperar el estado de la red
+15:42
+neuronal entonces ruta de los
+15:44
+checkpoints
+15:46
+vamos a llamarle hace
+15:49
+más
+15:50
+[Música]
+15:54
+con esto tendríamos ya los tres
+15:57
+directorios que vamos a estar utilizando
+15:59
+durante todo este tutorial ahora lo que
+16:01
+me interesa sería tener pues todo el
+16:03
+listado de archivos que están dentro de
+16:05
+los directorios de datos entonces para
+16:07
+eso lo que nos vamos a aprovechar es lo
+16:08
+que nos permite hacer en google collapse
+16:11
+que básicamente ejecutar comandos de
+16:14
+consola vale podemos generar aquí una
+16:16
+variable que va a hacer
+16:17
+img poor's y podemos ejecutar comandos
+16:21
+como ls entonces el resultado de
+16:23
+ejecutar este comando se va a guardar
+16:25
+dentro de la variable img url es ese
+16:29
+si hacemos el list nos va a dar los
+16:32
+datos en diferentes columnas con lo cual
+16:33
+si le pongo guión uno no lo va a
+16:35
+devolver toda una columna que es lo que
+16:37
+nos interesa y queremos que nos devuelva
+16:39
+el listado de por ejemplo el directorio
+16:42
+impact para evaluar una variable que
+16:45
+tenemos definido dentro de nuestro
+16:46
+código como ésta va a ser un comando de
+16:48
+base pues lo tenemos que poner entre
+16:51
+llaves con esto lo ejecutamos
+16:54
+y si todo va bien dice que no puede
+16:56
+acceder nos vamos a hacer un print y a
+16:59
+ver qué ha pasado
+17:00
+en este caso está detectando la ruta mal
+17:03
+porque me ha faltado ponerle comillas
+17:05
+cuando se evalúe esta variable pues que
+17:08
+esté contenida dentro de comillas si lo
+17:10
+ponemos así
+17:13
+ahora sí vale ahora podemos ver como si
+17:15
+hacemos un print no hace falta si es la
+17:18
+última línea se va a visualizar si vemos
+17:20
+el contenido esta variable pues es una
+17:22
+lista donde tenemos en cada uno de los
+17:24
+apartados de la lista pues el nombre del
+17:26
+fichero de nuestros datos perfecto vale
+17:30
+el siguiente paso que tenemos que hacer
+17:31
+ya lo opuesto y ahora voy a explicar el
+17:34
+código pero sobre todo es importante
+17:36
+entenderlo porque recuerden que tal y
+17:38
+como hemos visto nuestros datos y yo
+17:40
+entrenara mi red neuronal con los datos
+17:42
+tal cual los acabo de cargar pues si
+17:44
+recuerdan en cuando les ha enseñado la
+17:46
+carpeta con flores
+17:47
+todas estas flores estaban ordenadas por
+17:49
+tipo de flor color etc etc etc es decir
+17:52
+que si yo le fuera suministrando la red
+17:54
+neuronal a estos datos y dijera mira la
+17:56
+primera parte va a ser una partición de
+17:57
+entrenamiento y la siguiente va a ser de
+18:00
+prueba pues como hay una ordenación
+18:03
+lógica esa primera partición y esa
+18:05
+segunda partición pues van a ser
+18:06
+diferentes tipos de datos puede que la
+18:08
+primera sea una margarita y la siguiente
+18:10
+sea una rosa con lo cual de alguna
+18:13
+manera nos tenemos que cargar
+18:15
+esta ordenación lógica y para eso lo que
+18:17
+tenemos que hacer es un saber coger
+18:20
+nuestros datos y reorganizarlo y en este
+18:23
+caso lo voy a hacer directamente
+18:24
+reordenando y haciendo el random sobre
+18:28
+los nombres de ficheros que acabamos de
+18:30
+cargar y es básicamente lo que hace esta
+18:32
+línea de código de aquí lo que he hecho
+18:34
+bueno ha sido coger y definir que voy a
+18:36
+trabajar con 500 imágenes en mi n en
+18:39
+este caso va a ser 500 imágenes de
+18:41
+flores y mi data hace este entrenamiento
+18:43
+va a ser un 80% por eso con joaquín y
+18:46
+hago la multiplicación un 80 por ciento
+18:48
+de mi n es decir en este caso por si son
+18:50
+500 van a ser 400 imágenes valen las que
+18:53
+usamos de entrenamiento a partir de ahí
+18:55
+pues vamos a hacer el shuffle aleatorio
+18:57
+que hemos mencionado y para eso pues
+18:59
+tenemos que coger vamos a hacer una
+19:01
+copia del listado de feelings que hemos
+19:04
+guardado en la variable img urls es y la
+19:07
+guardamos en esta variable de aquí rand
+19:09
+urls es
+19:11
+y después lo que vamos a hacer es un
+19:13
+jefe el aleatorio aprovechando la
+19:15
+función de la librería de nanping en
+19:18
+nanping punto random punto shuffle y
+19:20
+vamos a hacer un shuffle de la variable
+19:22
+que hemos generado con lo cual aquí
+19:24
+ahora sí ya tendríamos los files
+19:26
+reorganizados de manera aleatoria esta
+19:29
+línea de código aquí ha especificado un
+19:31
+sip
+19:32
+aleatorio que lo que pasa es que siempre
+19:34
+que lo ejecute nos genere en la misma
+19:36
+ordenación aleatoria y esto lo estoy
+19:38
+haciendo y lo voy a poner a poner
+19:40
+solamente de cara al tutorial solo para
+19:44
+el tutorial es decir esto es para que
+19:46
+todos los que hagamos el tutorial pues
+19:48
+cuando pongamos esta ciudad aleatoria
+19:50
+cuando pongas que en este caso se
+19:52
+reordene según la identificación número
+19:54
+23 pues todos tengamos la misma
+19:57
+reordenación y todos veamos las mismas
+19:58
+imágenes pero de cara a trabajar
+20:00
+normalmente pues tú esto lo quitaría si
+20:02
+así cada vez que lo ejecute es pues
+20:04
+tendrías resultados diferentes
+20:07
+entonces una vez tengo ya mi jefe el
+20:09
+aleatorio pues lo que hago ahora generar
+20:11
+me dos particiones una de entrenamiento
+20:13
+y una de test como está hecho de manera
+20:16
+aleatoria pues simplemente puedo decir
+20:17
+oye cógeme de la lista de urls
+20:21
+aleatorias acuérdense dos puntos y
+20:24
+cógeme hasta el número de datos de
+20:27
+entrenamiento que ha especificado 30
+20:29
+rabaja n y los de test van a ser coger
+20:32
+el slide la porción correspondiente a el
+20:35
+final de los datos de entrenamiento
+20:37
+hasta el número total de datos que
+20:39
+especificado que son estos dos números
+20:40
+que tengo aquí si esto lo ejecutamos
+20:43
+podemos ver que la longitud de mediaset
+20:45
+es en total 7 mil 725 imágenes en
+20:50
+mislata set de entrenamiento tiene 400
+20:52
+imágenes y mira está set de después
+20:55
+tendrás 100 imágenes diferentes
+20:58
+esto no significa que hayamos cargado
+21:00
+las imágenes todavía aquí lo único que
+21:02
+tenemos son diferentes particiones de
+21:04
+los nombres de archivos de nuestros
+21:06
+datos ahora vamos a tener que hacer esto
+21:08
+descargar las imágenes básicamente lo
+21:11
+que vamos a hacer ahora es que sabiendo
+21:12
+que la app y que vamos a utilizar la api
+21:14
+data sets de la librería de tensor flow
+21:16
+lo que nos va a pedir es que cuando
+21:19
+carguemos las imágenes le especificamos
+21:21
+qué funciones queremos que se apliquen a
+21:23
+la hora de procesar las por ejemplo pues
+21:25
+si quieres hacer que todo comentéis jon
+21:27
+si quieres reescalar tu imagen si la
+21:28
+quieres normalizar todas estas funciones
+21:30
+las tienes que implementar tú de cara
+21:33
+puedo decirle mira va a aplicar esta
+21:35
+función esta función esta función y es
+21:37
+lo que vamos a hacer ahora vale voy a ir
+21:38
+un poco más ágil porque como digo no es
+21:41
+tan importante
+21:43
+pero lo que voy a hacer es definir pues
+21:44
+las variables que especifican cuál es el
+21:48
+tamaño y la altura de mí
+21:51
+de mis imágenes y vamos a crear
+21:54
+diferentes funciones que nos van a
+21:55
+servir bien por ejemplo una de las
+21:57
+funciones podría ser ruiz ice que hace
+22:00
+risa y después tú le vas a pasar a la
+22:02
+imagen de entrada le vas a pasar la
+22:04
+imagen de salida la target y le vas a
+22:06
+pasar por una altura y le vas a pasar un
+22:10
+ancho con esto lo que va a hacer es
+22:12
+coger ambas imágenes y vamos a hacer un
+22:15
+tensor flow entonces y esta es de es
+22:19
+esta librería no es dentro de nietzsche
+22:23
+dentro del módulo de emails pues habrá
+22:25
+un risa es que vamos a llamarle le vamos
+22:27
+a decir mira me cogen la imagen un email
+22:30
+y le vas a hacer un risas de hate y d
+22:36
+uy
+22:38
+hacemos esto para esta y hacemos lo
+22:40
+mismo para target marketing
+22:46
+targeting vale con esto ya estaremos
+22:49
+pues utilizando y definiendo nuestra
+22:52
+función para service eyes llamando
+22:53
+directamente a las funciones de extensor
+22:55
+lo devolvemos en img y devolvemos target
+22:59
+img esto que acabamos de hacer con esta
+23:01
+función para re escalar las imágenes
+23:04
+porque ponerlo aquí
+23:06
+imágenes
+23:08
+vamos a hacer igual pues con el resto de
+23:10
+funciones que nos hacen falta por
+23:13
+ejemplo otra función pues podría ser
+23:15
+normalizar que es normalizar pues si por
+23:17
+ejemplo nuestras imágenes vienen
+23:19
+representadas como matrices de números
+23:21
+float que van de 0 a 255 pues en este
+23:24
+caso la queremos trabajar con ellas en
+23:26
+el dominio de menos 1 a 1 vale porque
+23:29
+esto va a hacer que la computación sea
+23:31
+más estable etc etc etc entonces para
+23:33
+pasar de 0 a 255 a menos 11 que tenemos
+23:37
+que hacer pues si dividimos en 3 127.5
+23:40
+que es la mitad 255 nuestras imágenes
+23:43
+pasan a estar en el dominio de 0 a 2 y
+23:46
+si le restamos a 1 pasan a estar en el
+23:48
+dominio de menos 11
+23:50
+lo hacemos cuando más imágenes y listo
+23:53
+la siguiente función si tiene un poco
+23:55
+más de chiste y aquí me voy a parar un
+23:56
+poco y es básicamente una función que en
+23:59
+el paper de picks tópix recomiendan
+24:01
+utilizar y que llaman random twitter y
+24:04
+que básicamente cumplen la necesidad de
+24:07
+hacer aumentación de datos vale
+24:08
+recuerden que aumentar datos significa
+24:11
+coger tu data set o original y por
+24:13
+ejemplo si tienes solamente una flor de
+24:14
+una margarita pues aplicar
+24:16
+transformaciones aleatorias que
+24:17
+perturben mínimamente esa imagen para
+24:20
+generar virtualmente más imágenes por
+24:22
+ejemplo si tienes la margarita puedes
+24:24
+mover un poco a la derecha un poco a la
+24:25
+izquierda un poco arriba abajo y
+24:27
+aleatoriamente por generarte más
+24:28
+imágenes de esa margarita que van a
+24:30
+darle mayor variabilidad a tu red
+24:32
+neuronal y va a ser que el entrenamiento
+24:34
+pues sea mejor
+24:36
+entonces en el paper especifican hacer
+24:38
+lo que ellos llaman random jeter que es
+24:39
+como el nerviosismo aleatorio y es
+24:42
+básicamente esto no es desplazar un poco
+24:45
+la imagen como lo implementan pues ellos
+24:47
+recomiendan que si tu imagen es de 256
+24:49
+por 256 hagas una ampliación al aumento
+24:53
+del tamaño de 286 286
+24:56
+después con ese tamaño grande hagas un
+24:58
+crop aleatorio de 256 por 256 es decir
+25:01
+que cojas una zona de esa imagen más
+25:03
+grande y te quedes con ella con eso ya
+25:06
+has conseguido hacer ese desplazamiento
+25:07
+aleatorio además además de hacer este
+25:10
+desplazamiento aleatorio también te
+25:11
+dicen que puedes hacer un flip
+25:13
+horizontal y que básicamente voltear tu
+25:16
+imagen vale una margarita si la volteas
+25:18
+horizontalmente sigue siendo una
+25:19
+margarita y ya está entonces es
+25:21
+básicamente lo que hemos implementado en
+25:23
+esta función de aquí
+25:24
+cogemos nuestras dos imágenes y hacemos
+25:27
+un risk eyes aprovechamos ya la función
+25:29
+que hemos definido antes aquí arriba y
+25:31
+hacemos un risai de 286 por 286 como
+25:34
+acabo de decir a partir de ahí claro la
+25:37
+el desplazamiento aleatorio que tú
+25:39
+expliques sobre una imagen ha de ser
+25:41
+igual en la otra imagen con lo cual lo
+25:44
+que podemos hacer para hacer la misma
+25:46
+transformación en ambas imágenes es
+25:48
+superponer las vales como si estuvieras
+25:50
+haciendo manualidades y se paren pues
+25:52
+amplio las dos imágenes una sobre otra y
+25:54
+voy a recortarla todos iguales y de
+25:56
+manera igual como lo haces por poniendo
+25:58
+una encima de otra esto lo conseguimos
+26:00
+con esta línea de código de aquí
+26:01
+llamando a la función
+26:03
+flow está donde le pasamos las dos
+26:05
+imágenes y básicamente con esto las
+26:08
+apilados les decimos que no las app y
+26:09
+les en el eje 0 con lo cual ahora vamos
+26:12
+a tener si antes teníamos por ejemplo
+26:14
+una imagen de 256 por 256 ahora tenemos
+26:17
+un objeto tridimensional que serían dos
+26:19
+por 256 por 256
+26:23
+esto lo estamos guardando en stack
+26:25
+images y ahora lo que hacemos es llamar
+26:27
+a la función tensor flow del módulo
+26:29
+email random crop está en la que va a
+26:31
+ser el recorte aleatorio
+26:33
+cuanto lo va a recortar pues al tamaño
+26:35
+que especificamos que va a ser dos las
+26:37
+dos imágenes que tenemos a 256 por 256
+26:41
+por tres canales de color que tenemos
+26:44
+estas dos imágenes la guardamos en la
+26:46
+variable crop el email y las recuperamos
+26:50
+de nuevo vale cogemos la primera y la
+26:51
+segunda y ya está la volvemos a guardar
+26:54
+en image y de heimlich a partir de ahí
+26:57
+sólo nos queda aplicar el random flip
+26:59
+que lo vamos a hacer de manera aleatoria
+27:00
+no lanzando una moneda al aire si sale
+27:03
+el random flip llamamos aquí a tensor
+27:05
+flow random y uniforme le pasamos
+27:08
+los dos paréntesis para especificar que
+27:11
+nos genera un escalar un número
+27:12
+aleatorio y si es el número aleatorio
+27:14
+mayor a 0.5 pues volteamos la imagen si
+27:17
+no la dejamos como esta para voltear la
+27:19
+imagen llamamos a tensor flow email flip
+27:21
+left to right de derecha bueno de
+27:23
+izquierda a derecha y lo hacemos con
+27:25
+ambas imágenes en image game y con esto
+27:28
+devolvemos y ya tenemos hecho nuestra
+27:30
+función que va a ser la aumentación de
+27:33
+datos
+27:33
+a partir de ahí pues sólo nos queda una
+27:36
+función más y esta función que nos falta
+27:38
+es la que se va encargar de cargar las
+27:41
+imágenes
+27:45
+para cargar las imágenes pues lo que
+27:46
+vamos a hacer es pasarle un finding un
+27:49
+nombre de archivo y también vamos a
+27:51
+especificar un flag una variable
+27:53
+booleana que no para decir si queremos
+27:55
+aplicar el dato comentéis jon o no lo
+27:57
+vamos a querer aplicar por defecto vamos
+27:59
+a decir que siempre nos apliquen las dos
+28:01
+mentes o no que lo que hacemos poniendo
+28:02
+el igual true
+28:06
+esta función se implemente de la
+28:07
+siguiente manera parece que hay muchos
+28:10
+pero realmente no es nada básicamente
+28:11
+con estas dos líneas de código bueno con
+28:13
+esta línea de códigos con lo que estamos
+28:15
+cargando la imagen desde nuestro archivo
+28:17
+ahora sí estamos yendo al directorio de
+28:19
+google drive y estamos utilizando la
+28:22
+función input del módulo imputado porque
+28:24
+read file para irnos a nuestro
+28:26
+directorio de input y el fin en que
+28:29
+hemos especificado y cargando de ahí la
+28:30
+imagen esa imagen la de codifica mos
+28:33
+como una imagen jpg utilizando el módulo
+28:36
+de tensor flow y estamos haciendo un
+28:38
+cast para transformar la valores de tipo
+28:41
+float vale a tipos decimales para que
+28:44
+para que si en caso por ejemplo cuando
+28:46
+hacemos la normalización pues podamos
+28:47
+hacer las divisiones y nos haga las las
+28:50
+divisiones en formato decimal y no nos
+28:52
+las conviertan a números enteros y nos
+28:54
+fastidió todo el sistema aparte de eso
+28:57
+al final le ha añadido este corchete de
+28:59
+aquí que lo que está diciendo es que
+29:01
+mira las imágenes que me cargué me
+29:03
+mantienes todas las dimensiones como
+29:05
+aparezcan sí que van a ser 256 por 256
+29:10
+la última dimensión me la limita a que
+29:12
+solamente tenga tres componentes no más
+29:15
+de tres porque hago esto bueno esto
+29:17
+sigue siendo porque en algunos casos si
+29:19
+a lo mejor se te va la patata y cargan
+29:21
+la imagen en formato png y esa imagen en
+29:24
+formato png tiene un canal alfa que van
+29:26
+a ser cuatro componentes
+29:29
+esto posiblemente haga la lectura aún
+29:31
+cuando estamos utilizando la función de
+29:33
+jpg pero no para cargar cuatro
+29:35
+dimensiones y eso si no lo contemplamos
+29:37
+a posteriori por nos va a generar el
+29:38
+problema para ahorrarme ese problema
+29:40
+digo mira me da igual que me vengas con
+29:42
+4 con 5 con 20 componentes tú quédate
+29:44
+con las tres primeras que van a ser los
+29:46
+canales rgb y ya está
+29:48
+hacemos esto para un email lo hacemos
+29:51
+también para el remake no vale mega dar
+29:54
+cuenta que tengo el código anterior no
+29:56
+ha cambiado las variables esperadas
+29:57
+listo todas las variables que eran ere
+29:59
+image ya las ha convertido a target
+30:01
+images
+30:01
+es que tengo la chuleta aquí y me he
+30:03
+copiado el código y no había cambiado la
+30:04
+variable vale listo entonces con esto ya
+30:07
+tendríamos cargada en nuestras variables
+30:09
+y ninis y tal que teen witch y nuestras
+30:12
+imágenes ahora que hacemos pues
+30:14
+directamente utilizar las funciones que
+30:15
+hemos definido anteriormente para hacer
+30:18
+el risk eyes al 256 por 256 en caso de
+30:22
+que hayamos activado la variable
+30:23
+booleana pues aplicamos el random jeter
+30:25
+y normaliza más al dominio de menos 11
+30:28
+estas valores ya todo procesado los
+30:31
+devolvemos muy bien con esto ya tenemos
+30:34
+la función que se va a encargar de carga
+30:35
+las imágenes y de aplicar todo el
+30:37
+procesamiento que pasa que nosotros
+30:40
+vamos a utilizar el módulo como ya he
+30:42
+dicho la api de data set que ya bien
+30:45
+implementada en tensor flow que
+30:46
+básicamente tula específicas una función
+30:48
+de carga de datos y a partir de ahí él
+30:50
+se va encargada de optimizar t todo ese
+30:52
+proceso esta función podría valernos la
+30:55
+que hagamos de generar aquí
+30:57
+como para decirle pues mira utiliza esta
+30:59
+función para carga de datos pero qué
+31:01
+pasa que esta función es diferente ya
+31:04
+sea si estás entrenando o ya sea si
+31:07
+estás haciendo el test si estás con toda
+31:10
+clase de pruebas por qué porque en el
+31:11
+data set de prueba tú no vas a aplicar
+31:13
+el dato aumentes jon tú no vas a decir
+31:15
+yo quiero probar una imagen y quiero que
+31:17
+además me haga un flip horizontal no tú
+31:19
+quieres que tu imagen que la conserve
+31:21
+como es eso significa que tenemos que
+31:23
+generar dos funciones diferentes ya sea
+31:25
+de entrenamiento y de prueba y eso es lo
+31:27
+que vamos a hacer ahora como ven lo que
+31:29
+he hecho aquí pues ha sido simplemente
+31:31
+generar me de dos funciones los tres y
+31:33
+mitch y los test image donde le pasó el
+31:36
+file ya no le pasó la booleana y estas
+31:39
+funciones simplemente encapsulan la
+31:41
+función de la image
+31:42
+una con la variable la documentación en
+31:44
+true y otra con la variable de
+31:46
+documentación en force con lo cual ya
+31:48
+tenemos esta distinción en los dos tipos
+31:49
+de funciones que vamos a utilizar para
+31:51
+cargar imágenes podemos hacer una prueba
+31:53
+para ver si están funcionando bien como
+31:55
+deberían
+31:56
+vamos por ejemplo a coger aquí vamos a
+31:59
+llamar a load
+32:01
+el train image vamos a coger de nuestra
+32:05
+variable random url es la primera imagen
+32:08
+y vamos a coger de la función nuestro
+32:12
+cliff y masoud y que nos visualice esta
+32:18
+imagen y vamos a ver si está funcionando
+32:20
+algún error name haitises notifight esto
+32:24
+es
+32:26
+hate this is not it fine porque me
+32:29
+equivoqué escribiéndolo aquí esto
+32:30
+debería ser hate ejecutamos de nuevo
+32:35
+otro error
+32:37
+este error tenía que llegar y ha llegado
+32:39
+ahora y hay que explicarlo porque detrás
+32:42
+de esto hay algo que es importante este
+32:45
+error lo que nos está diciendo es que
+32:47
+aquí cuando hemos utilizado en la
+32:49
+función random jeter aquí si se fijan y
+32:53
+utilizado tensor flow random y uniforme
+32:56
+para generar un número aleatorio que
+32:58
+pasa podría haber por ejemplo utilizado
+33:00
+la librería nancy que también tiene
+33:01
+funcionalidades para generar t números
+33:03
+aleatorios pero en este caso he
+33:05
+utilizado
+33:05
+el tensor flow lo que estoy diciendo es
+33:07
+que esa operación va a venir incluida
+33:11
+dentro de nuestro grafo computacional en
+33:13
+tensor flow y no va a ser un número que
+33:17
+se genere pues con la otra librería que
+33:19
+sucede con este error que cuando se
+33:21
+ejecuta esta función y la estoy
+33:23
+ejecutando ahora me está diciendo mira
+33:25
+es que no te puedo decir no te lo puedo
+33:27
+ejecutar porque este valor de aquí no te
+33:31
+voy a devolver un valor como tal te
+33:32
+estoy devolviendo un tensor porque
+33:34
+recuerden que intenso el flow hasta que
+33:36
+tú no evalúa es todo tu gráfico
+33:38
+computacional lo único que se está
+33:41
+moviendo por la estructura de datos son
+33:43
+tensores vacíos como promesas a futuro
+33:46
+de que ahí va a haber un tensor que te
+33:47
+va a dar un número aleatorio pero ahora
+33:49
+mismo eso no está
+33:51
+porque está explicando todo este rollo
+33:52
+porque esta es la forma de funcionar de
+33:54
+intenso flow
+33:55
+versión 1 punto x pero qué pasa que esto
+33:59
+cambia con la versión del tensor flow
+34:01
+2.0 en la versión de tensor flow 2.0
+34:05
+todo esto se simplifica una de las
+34:06
+grandes funcionalidades que añaden que
+34:08
+es el famoso
+34:09
+iger moat que ya de hecho vendría en la
+34:13
+versión 1 punto x pero que no está
+34:14
+activado por defecto la versión 2.0 sí
+34:16
+lo estaría con lo cual para solucionar
+34:19
+esto estaba previsto lo que tenemos que
+34:21
+hacer es activar la versión 2.0 de
+34:24
+tensión o de intenso flow para eso pues
+34:26
+vamos a coger vamos a reiniciar todo el
+34:28
+entorno de ejecución vale todo lo que
+34:30
+teníamos ha hecho por se va a reiniciar
+34:33
+y lo único que tenemos que hacer pues
+34:35
+sería generar aquí una celda de código y
+34:38
+nos vamos a llamar a tensor flow versión
+34:41
+y si se fijan aquí nos dice en versiones
+34:44
+disponibles 1 punto x o 2 punto x pues
+34:48
+le damos aquí a 2 x no seleccionaría la
+34:50
+versión tensor flow 2 punto de aquí con
+34:53
+esto ahora sí podríamos volver a
+34:55
+ejecutar esta celda volveríamos a cargar
+34:57
+tensor flow en este caso ahora sí
+34:59
+estaremos cargando la versión 2x y en
+35:01
+esta versión no nos debería dar
+35:03
+problemas porque aquí ya los tensores no
+35:06
+es que estén vacíos y están esperando a
+35:08
+que tú activas una sesión y está está
+35:10
+tratada sino que se van evaluando en el
+35:12
+momento y eso es comodísimo esto es un
+35:15
+poco de información para que conozca
+35:17
+cómo funciona tensor fluck pero no es
+35:19
+indispensable si estás viendo por
+35:22
+primera vez esta herramienta
+35:23
+vamos a ejecutar esta hora y a ver qué
+35:25
+pasa vale tenemos un nuevo error pero
+35:29
+ahora ya no es el que teníamos el tema
+35:31
+de con lo cual cambiando la versión de
+35:32
+tensor flow o la 2.0 ya lo habríamos
+35:34
+solucionado esta sería una forma de
+35:36
+solucionarlo pero otra también podría
+35:38
+haber sido utilizar esto de aquí
+35:42
+vale esto es el decorador de funciones
+35:45
+que lo que está haciendo en este caso
+35:48
+pues sería coger la función que acompaña
+35:51
+y la estaría convirtiendo directamente
+35:54
+estaría llamando a la autógrafa a la
+35:56
+función nueva está también que tiene
+35:58
+tensor flow y lo estaría compilando la
+36:00
+función en python a una función de el
+36:04
+grafo computacional esto es un mecanismo
+36:06
+que ha encontrado la gente de google
+36:08
+para comunicar los dos mundos que hay
+36:12
+dentro de tensor flow ahora mismo que es
+36:14
+la versión de la 1 punto x que teníamos
+36:16
+en este gráfico computacional súper
+36:18
+optimizado y el y vermont que tenemos en
+36:20
+la versión 2.0 cuando llamamos a t efe
+36:23
+punto funkshion pues se compila la
+36:25
+función ya no estaría ni el mouse sino
+36:27
+que ya estaría compilada a este a este
+36:30
+grafo computacional y sería más óptima
+36:33
+de hecho ya lo veremos más adelante en
+36:35
+este caso pues al llamarla al llamar a
+36:37
+esto aquí cómo estaría compilando toda
+36:39
+esta función al lenguaje de tensor flojo
+36:42
+el grafo computacional pues todas las
+36:44
+condicionales y todos los tensores que
+36:46
+tenemos aquí también se traducirían
+36:48
+con notaría el problema es algo hubiera
+36:50
+sido también otra forma de solucionar
+36:52
+esto si ejecutamos esto ahora pues vamos
+36:55
+a ver como aquí abajo
+36:59
+aquí abajo vamos a tener otro error lo
+37:01
+voy a parar ya porque los 30 image
+37:04
+nos está cargando dos imágenes y en
+37:05
+emails lo podemos visualizar una así que
+37:08
+vamos a poner aquí corchete para
+37:09
+seleccionar la primera imagen y lo vamos
+37:11
+a ejecutar a ver si anota problema vale
+37:14
+y efectivamente ya no tenemos el
+37:16
+problema de antes pero si estamos
+37:17
+teniendo una imagen en negro y esto es
+37:20
+porque nuestras imágenes y recuerdos las
+37:22
+tenemos normalizadas de menos 11 y james
+37:25
+ou si no recuerdo mal va de 0 a 1 con lo
+37:28
+cual pues tenemos que coger esta imagen
+37:31
+de aquí y sumarle 1 y dividir entre 2
+37:35
+con esto de si le sumamos uno sería de 0
+37:38
+2 y entre 2 de 0 a 1 me falta paréntesis
+37:41
+por aquí
+37:43
+y con esto ahora debería estar bien la
+37:47
+cosa
+37:48
+efectivamente vale aquí estamos viendo
+37:49
+ya nuestra imagen de entrada esta sería
+37:52
+la imagen número 1 y la imagen número
+37:55
+dos sería la de salida que sería que
+37:58
+éste está de aquí perfecto
+38:01
+pues ya está vale ya tenemos nuestras
+38:04
+imágenes cargadas está pasando por el
+38:06
+procesamiento de datos de hecho
+38:08
+podríamos ver si se está aplicando el
+38:10
+random jitter este aleatoriamente
+38:12
+debería de voltearse la imagen así que
+38:15
+vamos a ver si llamándola varias veces
+38:16
+aquí vemos que el tallo está por aquí
+38:18
+vamos a ejecutarla de nuevo
+38:21
+sigue estando por ahí
+38:24
+sigue estando por ahí coño
+38:28
+sigue estando por ahí o está fallando o
+38:31
+no está funcionando la probabilidad que
+38:36
+esta palabra salía por el otro lado es
+38:39
+decir se están aplicando todos los
+38:40
+procesamientos que hemos definido en
+38:42
+nuestras funciones perfecto con esto
+38:46
+pues ya tendríamos todas nuestras
+38:48
+funciones creadas pero en ningún momento
+38:50
+hemos cargado las imágenes todavía para
+38:52
+eso tenemos que generar los generadores
+38:54
+que estamos mencionando antes y esto lo
+38:56
+vamos a hacer a través de la api
+38:58
+de data sets que viene implementada
+39:00
+dentro del tensor flow para eso entonces
+39:03
+pues vamos a crear por ejemplo un 30
+39:05
+data set y lo vamos a hacer llamando al
+39:09
+módulo 20
+39:12
+pero en mayúscula data sets
+39:16
+y vamos a llamar una función que se
+39:18
+llama from es front-end soles likes esto
+39:22
+lo que va a hacer es decir vale yo te
+39:24
+voy a generar un data set a partir de un
+39:28
+listado de elementos que tú me
+39:29
+especifique perfecto y claro yo he
+39:33
+definido mis funciones aquí arriba
+39:34
+nosotros vamos a llamar por ejemplo a
+39:35
+los 30 emails para generar nuestro data
+39:38
+set y como vemos aquí lo que te pide
+39:41
+como entrada es un nombre de archivo
+39:43
+entonces que el listado tenemos que
+39:45
+pasarle aquí pues le vamos a pasar el
+39:47
+listado de nombres de archivo que ya
+39:49
+tenemos especificados antes con lo cual
+39:51
+cuando esto cuando esto le pasa es el
+39:55
+listado esto va a llamar a esta función
+39:57
+de aquí y esta función aquí va a llamar
+39:59
+a todas las anteriores para generar el
+40:00
+data set entonces vamos a especificar
+40:02
+aquí
+40:03
+tr url es como el tensor a partir del
+40:07
+cual queremos generar nuestro data z
+40:09
+con esto ya le hemos especificado que va
+40:12
+a utilizar ese listado para generar el
+40:14
+data set pero no hemos cargado las
+40:17
+imágenes como vamos a hacer eso pues
+40:19
+vamos a vamos a llamar aquí a la función
+40:22
+mapa map es la que se va a encargar de
+40:24
+hacer el mapeo entre el listado de
+40:26
+feelings y el las funciones que tenemos
+40:30
+especificadas aquí arriba en este caso
+40:32
+pues queremos que nos mapa cada uno de
+40:34
+los highlights que tenemos aquí con
+40:37
+la función
+40:40
+los train email y con esto pues ya
+40:43
+debería estar funcionando la cosa bien
+40:47
+además aquí hay una una propiedad que
+40:50
+podemos especificar la que es el número
+40:53
+de procesamientos en paralelo que
+40:54
+queremos que tenga estas funciones
+40:57
+cuando vayan siendo llamadas entonces lo
+41:00
+normal sería utilizar tantos hilos en
+41:02
+paralelo como se pregunten a tu
+41:04
+ordenador pero también podemos dejar que
+41:06
+sea tensor flow el que decida cómo
+41:10
+ajustar este parámetro vamos a hacerlo
+41:12
+así esto debería funcionar perfecto y en
+41:18
+principio ya estaría ya con esto
+41:20
+habríamos generado un data set donde
+41:23
+podemos ir obteniendo diferentes
+41:25
+imágenes pero nos faltaría una cosita
+41:28
+más y es una funcionalidad muy cómoda
+41:30
+que tiene esta este objeto el objeto
+41:33
+data set que básicamente que tú le
+41:35
+puedes especificar qué te distribuye a
+41:38
+los datos en diferentes lotes porque
+41:41
+como ya saben nosotros podemos
+41:42
+especificar a la hora de entrenar a
+41:44
+nuestra red neuronal diferentes tamaños
+41:46
+de lotes que van a ser los que le
+41:47
+suministramos para aplicar todo el
+41:49
+proceso de optimización
+41:51
+tú aquí pues si por ejemplo quieres un
+41:54
+bat 6 de 32 le puedes decir 33 et agrupa
+41:58
+me todos los datos que has cargado en el
+42:00
+lote de 32 tamaños como en el paper
+42:03
+especifican que ellos utilizan un tamaño
+42:06
+de lote de 1 pues lo que vamos a hacer
+42:08
+con eso ya tendríamos el objeto creado
+42:10
+data set que ya vamos a poder utilizar
+42:12
+de manera cómoda pues por ejemplo le
+42:14
+podemos decir oye del data set dame
+42:16
+cinco lotes de tamaño uno pues llamas a
+42:20
+la función take y te devolverá el objeto
+42:22
+que te va a suministrar eso o por
+42:24
+ejemplo lo puedes literario dices oye
+42:25
+mira para y ni m&g; y teje m&g; que van a
+42:30
+hacerlos
+42:31
+los dos objetos que devuelve cada uno de
+42:33
+los lotes pues integran el 30 set para
+42:37
+los cinco valores y esto lo hacemos y si
+42:41
+me viniera aquí arriba podría copiar
+42:43
+esta línea para visualizar imágenes la
+42:46
+metemos dentro del bucle for
+42:50
+y ahora meta hacerlo al 30 email o
+42:52
+directamente podemos coger
+42:55
+por ejemplo de heim m&g; le damos a enter
+42:59
+y esto debería de
+43:02
+fallar porque dejé img que se tiene
+43:12
+porque tiene el claro porque lo que me
+43:14
+está devolviendo en cada objeto es el
+43:16
+lote entonces tengo que quitar esta
+43:17
+dimensión de aquí que es lo que me
+43:18
+molesta para eso pongo que la dimensión
+43:21
+elijo el primer elemento el resto lo
+43:23
+dejamos lo igual le damos de nuevo ahora
+43:25
+nos da problemas
+43:27
+y efectivamente pues te visualiza cada
+43:30
+una de las imágenes como no bueno solo
+43:33
+ha visualizado uno pero por qué no
+43:34
+puesto show para que me genera
+43:36
+diferentes plots aquí vamos viendo cómo
+43:40
+va enterando y ahora sino para cargando
+43:42
+las diferentes imágenes ok de esta
+43:44
+manera es como hemos hecho todo el
+43:47
+proceso de carga de datos es un poco con
+43:50
+eso hay que decirlo hay que hacer muchas
+43:52
+cosas pero ya partir de ahora ya todo el
+43:55
+tratamiento datos va a ser mucho más
+43:56
+cómodo esto que hemos hecho aquí pues
+43:59
+tenemos que hacerlo de manera similar
+44:00
+con nuestro test
+44:04
+la palabra test que vamos a ir
+44:06
+reemplazando aquí aquí
+44:10
+aquí aquí y aquí vale con esto ya
+44:15
+tendríamos creados los dos generadores
+44:17
+que nos harían falta para trabajar todo
+44:19
+lo siguiente esta es la parte como digo
+44:21
+de carga de datos lo más para mi gusto
+44:23
+coñazo junto a toda la parte del bucle
+44:27
+de entrenamiento pero bueno con esto ya
+44:29
+tendríamos el primer paso completado lo
+44:31
+siguiente que vendría ahora sería
+44:33
+empezar a diseñar nuestro sistema picks
+44:35
+tópix que básicamente para lo que
+44:36
+estamos aquí
+44:39
+coffee time
+44:41
+a ver lo que viene ahora no es tan
+44:44
+complicado y sin embargo es la parte más
+44:46
+importante de todo el sistema que vamos
+44:47
+a generar porque es el diseño de la
+44:50
+arquitectura picks to picks no el modelo
+44:52
+este que vimos en el vídeo el modelo
+44:54
+picks tópix y se acuerdan es un modelo
+44:55
+generativo una red generativa adversaria
+44:58
+condicionada es decir que no
+45:00
+nosotros vamos a condicionar lo que se
+45:02
+va a generar en función de un input que
+45:03
+le vamos a suministrar en este caso
+45:05
+imágenes y que en la parte del modelo
+45:08
+generador pues bien implementado por una
+45:10
+red de tipo you need que ya saben que es
+45:12
+un tipo de red donde tenemos una parte
+45:14
+convolución al donde se va comprimiendo
+45:15
+la información una parte de convolución
+45:18
+al donde se va descomprimiendo y una
+45:20
+serie de skeet conexiones que conectan
+45:22
+cada capa en el mismo nivel por el
+45:25
+contrario la parte del discriminador no
+45:27
+la mencionamos en el vídeo anterior pero
+45:29
+si te puedo adelantar que es un tipo de
+45:31
+red también convolución al con una serie
+45:33
+de características y que le da el nombre
+45:35
+de pachuca vale ahora veremos
+45:37
+exactamente cómo se implementa no es tan
+45:40
+complicado es lo vuelva estar utilizando
+45:42
+tensor flow que nos va a facilitar
+45:43
+bastante el trabajo en este sentido
+45:45
+además no sólo eso sino que en el propio
+45:48
+pero todo viene bastante bien explicado
+45:50
+no suele ser tan habitual que en este
+45:53
+nivel de detalle pero si se finaliza en
+45:56
+el paper hay un apéndice donde te
+45:58
+explican como la red generadora y la red
+46:01
+discriminadora vienen implementadas en
+46:04
+este caso pues te dices mira en la red
+46:06
+generadora tiene un incoder donde viene
+46:09
+implementado hay que poner este código
+46:11
+de aquí que anteriormente te han
+46:12
+explicado
+46:13
+ahora vamos a echarle un vistazo a esto
+46:14
+con más profundidad pero sepan que toda
+46:16
+la información de lo que vamos a
+46:17
+implementar ya viene detallado en el
+46:19
+paper por lo tanto lo primero que vamos
+46:21
+a hacer va a ser importar dentro del
+46:23
+módulo de que heras todas las capas que
+46:26
+nos van a servir pues para facilitarnos
+46:27
+un poco el trabajo y vamos a empezar a
+46:30
+diseñar nuestro generador si miramos al
+46:33
+paper podemos ver cómo nos explica que a
+46:36
+ver cada vez que en el código que nos
+46:38
+ponen aquí abajo salga una c y una acá
+46:41
+esto lo que denota es un bloque donde
+46:43
+hay tres capas diferentes por un lado y
+46:46
+una capa convolución al que va a
+46:48
+analizar la imagen luego va a ver una
+46:50
+capa de batch normalizase jon que va a
+46:51
+ser el proceso de normalizar a nivel de
+46:53
+lote y luego
+46:54
+una capa de activación donde hay una red
+46:58
+ok en este caso la cal lo que viene a
+47:01
+denotar es el parámetro de número de
+47:03
+filtros que va a tener la capa de
+47:05
+convulsión con eso pues podemos decir ah
+47:07
+vale si me estás diciendo esto entonces
+47:09
+el en code air ya saben la parte donde
+47:12
+la imagen se va a ir comprimiendo capa
+47:15
+tras capa pues va a estar formada por
+47:17
+una sucesión de estos bloques que no se
+47:18
+especifican aquí convolución batch norm
+47:21
+y re look pues aquí nos dice oye va a
+47:24
+venir uno que tiene 64 filtros luego
+47:26
+otro con 128 otro con 256 512 12 ta ta
+47:30
+ta hasta llegar a este punto esto va a
+47:33
+ser el embudo del cuello de botella de
+47:36
+nuestra red neuronal cuando lleguemos a
+47:37
+este bloque de aquí además nos
+47:39
+especifica qué
+47:42
+bueno que después de la última capa del
+47:43
+disco der se aplica una combo lución
+47:46
+vale esto lo veremos ahora y que todas
+47:50
+las capas del incoder son liquid relus
+47:53
+vale no es exactamente una capa de lo
+47:56
+normal de las que hemos visto en el
+47:57
+canal sino es una capa liquid de look
+47:59
+que es casi lo mismo con un arreglo
+48:00
+único que la parte de negativa la
+48:03
+derivada no es cero
+48:04
+vale es una derivada con una ligera
+48:05
+pendiente entonces sabiendo que estos
+48:08
+bloques se van a estar repitiendo todo
+48:10
+el rato que vamos a tener bloques de
+48:12
+tres capas bloque tres capas hasta el
+48:13
+tal tal lo que podemos empezar a hacer
+48:15
+es especificar ese bloque vale yo creo
+48:19
+que algo muy importante a la hora de
+48:20
+trabajar al diseñar redes neuronales y
+48:23
+pasa también en muchos otros ámbitos de
+48:24
+la programación es trabajar de forma
+48:27
+modular y de forma ordenada entonces
+48:29
+todo lo que puede hacer encapsulado
+48:31
+dentro de una función dentro de un
+48:32
+bloque lo mejor es hacerlo así para que
+48:35
+después podamos reutilizarlo de manera
+48:37
+cómoda
+48:38
+entonces vale sabemos que tenemos que
+48:39
+hacer una capa convolución al valor y
+48:41
+regla pues entonces nos venimos para acá
+48:43
+y vamos a especificar como si fuera una
+48:46
+función también
+48:47
+bloque que va a representar a esas tres
+48:49
+capas en este caso sabemos que en el in
+48:52
+code es lo que está pasando sobre la
+48:53
+imagen es que se está realizando una
+48:55
+compresión de la imagen estamos haciendo
+48:57
+un down sampling pues podemos llamar
+48:59
+nuestra función tan simple
+49:02
+ok y ahora vamos a ver qué parámetros le
+49:04
+vamos a meter a priori ya sabemos que
+49:07
+uno de los parámetros va a ser el número
+49:08
+de filtros de la capa conclusión al que
+49:10
+ya podemos especificar aquí filters
+49:13
+entonces ahora pues ya podríamos empezar
+49:15
+a diseñar nuestro bloque neuronal por
+49:17
+así llamarlo de la manera en la que
+49:19
+quieras no lo facilita esto sería pues
+49:21
+vamos a crear a nuestro modelo
+49:25
+el objeto secuencial vale secuencial es
+49:27
+la forma en la que la especificamos a
+49:28
+que eras que lo que vamos a definir
+49:30
+ahora es una secuencia de capas la
+49:32
+primera capa pues ya hemos visto que
+49:34
+sería le añadimos una capa convencional
+49:38
+para las imágenes no una capa
+49:40
+convencional con dos dimensiones y de
+49:42
+momento lo único que le vamos a
+49:43
+especificar es el número de filtros que
+49:46
+tiene ok entonces esta sería nuestra
+49:49
+capa
+49:50
+convolución al
+49:53
+después de esto recordamos que lo que
+49:56
+venía era una capa
+49:57
+de baches normalizase jon vale pues
+50:01
+simplemente nos venimos para acá decimos
+50:03
+resulta a bach
+50:09
+baches normalizase jon y listo y ya no
+50:12
+lo estaría añadiendo directamente a
+50:14
+nuestro bloque y lo último que
+50:16
+tendríamos que añadir también lo hemos
+50:17
+visto que es una capa de activación que
+50:21
+en este caso lo que sería es una líquida
+50:25
+el humo
+50:26
+ahí estaría pues con esto tan sencillo
+50:30
+como esto ahora podríamos escoger aquí y
+50:32
+decir oye el resultado
+50:35
+o sea devuélveme el resultado y entonces
+50:38
+pues ahora ya podríamos coger llamar a
+50:40
+esta función a un sample y cada vez que
+50:45
+ejecutemos esto pues nos estaría creando
+50:46
+un mini bloque donde nosotros podríamos
+50:49
+ir pasando los datos y arias la
+50:51
+convulsión el bache normalizase jong-il
+50:54
+a ricky del loop perfecto ahora hay una
+50:57
+serie de detalles que especifica el
+50:58
+paper que tenemos que ocuparnos por
+51:00
+ejemplo nos dice todas las convulsiones
+51:03
+son de filtros espaciales de tamaño 4x4
+51:06
+hay que especificar le ese tamaño cada
+51:09
+una de éstas tiene un strike
+51:10
+es decir cuántos píxeles se va a mover
+51:12
+el filtro sobre la imagen de dos pues
+51:15
+también hay que especificar lo luego por
+51:18
+aquí abajo creo que especifica que como
+51:20
+una excepción a la anotación que tenemos
+51:22
+arriba la que nos explican aquí pues la
+51:25
+capa de baches normalizase jon no se
+51:26
+aplica la primera capa de 64 del incoder
+51:30
+esta de aquí no tiene baches normalizase
+51:32
+jon pues también nos tenemos que ocupar
+51:34
+de esto
+51:36
+y creo que son estos unos pocos detalles
+51:38
+que hay que especificar y también este
+51:40
+vale que los pesos en nuestros
+51:43
+parámetros cuando están creados a la
+51:45
+hora de inicializar los vieron
+51:46
+inicializa dos por una un ruido
+51:49
+gaussianos de media cero y una
+51:51
+desviación estándar de 0 02 entonces
+51:53
+todos estos atributos los vamos a
+51:55
+especificar dentro de nuestro bloque
+51:57
+para pues apegarnos un poco a lo que el
+52:00
+paper nos está contando no vaya a ser
+52:01
+que sea importante entonces lo primero
+52:03
+que vamos a definir pues va a ser un
+52:05
+inicial hay ser una variable inicial hay
+52:08
+ser donde vamos a meter
+52:10
+el ruido aleatorio cause ya no normal
+52:14
+pues que acabamos de ver que hay que
+52:15
+poner la media tiene que ser cero y en
+52:18
+la desviación estándar si no recuerdo
+52:20
+mal 0 0 2 con esto ahora pues nos
+52:23
+podemos venir a nuestro filtro
+52:25
+convolución al y podemos decirle que
+52:29
+nuestros filtros se van a inicializar
+52:31
+kernel inicial ay ser con el inicializa
+52:35
+dor que hemos especificado arriba además
+52:38
+aquí la capa convulsionada sabemos que
+52:40
+tenemos que especificar que el tamaño de
+52:41
+los filtro
+52:42
+va a ser de 4x4 que los straits van a
+52:46
+ser de tamaño 2
+52:47
+[Música]
+52:48
+también podemos decirle que el padding
+52:50
+sea de tamaño igual para conservar el
+52:53
+tamaño de las de los mapas de
+52:55
+características según van pasando por
+52:57
+las capas y
+53:01
+y poco más por último hay un detalle que
+53:04
+podemos añadir y es que cuando tú estás
+53:06
+utilizando baches normalizase jones
+53:09
+esta computación va a añadir además de
+53:11
+hacerte la normalización va a añadir una
+53:13
+serie de parámetros que son equivalentes
+53:15
+a tener un parámetro de sesgo en la capa
+53:18
+anterior vale esto es un detalle muy
+53:21
+pequeño pero puesto a ahorrarnos
+53:23
+parámetros lo que podemos decir aquí es
+53:25
+oye
+53:26
+yus vayas creo que se llama él
+53:29
+efectivamente used by us es para decirle
+53:32
+meterle un parámetro de sesgo o no se lo
+53:34
+meta pues en este caso vamos a ir por
+53:36
+añade el parámetro de sesgo siempre que
+53:39
+no estemos aplicando batch normalizase
+53:42
+jon porque si lo estamos aplicando
+53:43
+realmente esto no nos hace falta con
+53:46
+esto ya tendríamos hecho todo nuestro
+53:49
+bloque
+53:51
+nuestro bloque de down sampling vale el
+53:53
+que va a ir por la parte del incoder si
+53:54
+lo ejecutamos veremos que nos da un
+53:58
+error porque no hemos especificado el
+54:00
+parámetro filtro pared exacto aquí
+54:02
+habría que poner esto así y de momento
+54:04
+parece que secuenciales notifight
+54:08
+secuencial y es notifight secuencial
+54:11
+diría que está bien escrito no sé si
+54:14
+falta algo más de la librería de que
+54:16
+eras vamos a
+54:19
+con cáncer
+54:23
+que eras importa
+54:25
+vale perfecto ahora sí pues eso con esto
+54:28
+ya tendríamos diseñado una función que
+54:30
+nos va a generar todos estos bloques que
+54:31
+nos van a hacer falta de cara a diseñar
+54:34
+nuestro encoder y claro esto está muy
+54:37
+bien para diseñar a nuestro encoder y
+54:38
+también para otra arquitectura que vamos
+54:41
+a hacer más adelante pero todavía nos
+54:42
+faltaría otro bloque más que se ocupe de
+54:44
+la parte del disco brno la que va
+54:47
+realizando el up sampling de la imagen
+54:48
+para recuperar y generar la imagen final
+54:51
+si no pedimos el paper vemos que el de
+54:53
+code air viene especificado por unas
+54:55
+capas que en este caso las codifican
+54:57
+como sede y que aquí arriba te dice que
+55:00
+que básicamente es un bloque donde se
+55:02
+está produciendo una convulsión un bache
+55:04
+normalizase jon un drop out y una capa
+55:06
+de activación reloj vale y también nos
+55:09
+indica aquí que las convulsiones en el
+55:11
+incoder por supuesto hacen un down
+55:13
+sampling de factor 2 es decir que cada
+55:15
+vez que se da un paso se reduce el
+55:17
+tamaño de la imagen en la mitad y esto
+55:20
+lo hace esto lo hacemos gracias a tener
+55:22
+el parámetro straits a 2 al mismo tiempo
+55:25
+que en el de coder se va realizando una
+55:26
+sampling de factor 2 y esta es la
+55:29
+principal diferencia entre el bloque de
+55:30
+down
+55:31
+el bloque de sampling entonces por eso
+55:35
+mismo lo que vamos a hacer es venir para
+55:36
+acá y nos vamos a copiar toda esta
+55:38
+función entera vamos a crear una nueva
+55:41
+celda y vamos a crear aquí ahora nuestro
+55:43
+bloque up sampling con la única
+55:46
+diferencia de que en este caso pues
+55:49
+lo que vamos a controlar si lo queremos
+55:51
+aplicar o no es el drop out porque en
+55:54
+algunas ocasiones si nos interesa y en
+55:55
+otras ocasiones no nos interesa como
+55:57
+podemos ver vale cuando lo tengamos
+55:59
+activado estaremos haciendo este bloque
+56:01
+de aquí cuando lo tengamos desactivado
+56:02
+estaremos haciendo estas partes de aquí
+56:04
+las que no tienen la late entonces el
+56:07
+sampling pues tiene que ser lo mismo una
+56:10
+capa secuencial inicializa door en este
+56:13
+caso tenemos una capa convolución al
+56:15
+pero es una capa convulsión al inversa y
+56:17
+éstos se hacen que heras con la capa
+56:20
+convolución a judith transport vale
+56:23
+kabul amos para que no me dé el toque y
+56:26
+que se quede toda la misma altura el
+56:29
+resto de parámetros son iguales a
+56:31
+filtros especificados por parámetros
+56:35
+padding de 6 y el utilizar el bayern
+56:38
+esto lo podemos quitar porque en este
+56:40
+caso siempre vamos a hacer un bache
+56:42
+normalizase jon perdón lo que podemos
+56:44
+quitar es esta parte de aquí esto lo
+56:46
+podemos poner a falso para que nunca se
+56:48
+utilice el parámetro de xesco y a partir
+56:51
+de ahí pues
+56:53
+podemos sacar la capa de baches
+56:55
+normalizase jon porque sabemos que vamos
+56:57
+a utilizar siempre está ok y en este
+57:02
+caso con lo que vamos a utilizar es el
+57:03
+parámetro que hemos especificado arriba
+57:04
+de a play applied drop out que todavía
+57:08
+no lo pilla porque no está ejecuta de la
+57:09
+celda así que lo escribimos drop bout en
+57:13
+el caso de que se tenga que aplicar drop
+57:16
+out pues que hacemos aplicar tropas
+57:18
+añadimos una capa que es una capa de
+57:20
+drop out con 0,5 creo que era
+57:25
+con esto pues si no me equivoco ya
+57:29
+tendríamos todo lo que hace falta capa
+57:32
+de drop agua la capa de drop out a es
+57:35
+una capa que simplemente lo que hace es
+57:36
+desconectarte una serie de conexiones de
+57:38
+manera aleatoria y que sirve como
+57:42
+como elemento regularizador de la red ok
+57:46
+pues con esto ya tendríamos diseñado
+57:48
+nuestro bloque de apps en x y si lo
+57:51
+probamos pues tampoco debería darnos
+57:52
+mucho problema correcto vale estaba
+57:56
+mirando en el paper y me acabo de dar
+57:58
+cuenta que especifican que el
+57:59
+decodificador la activación no es una
+58:02
+liquidez sino que simplemente es una
+58:04
+capa reloj así que lo que vamos a hacer
+58:05
+es cambiar esto de aquí por esto de aquí
+58:07
+así de sencillo es hacer cambios dentro
+58:10
+de nuestra red neuronal si se dan cuenta
+58:12
+muy bien pues ahora que tenemos los
+58:14
+bloques creados es solamente tenemos los
+58:16
+ladrillos de nuestra arquitectura ya lo
+58:18
+que tenemos que hacer es empezar a
+58:19
+conectarlos para diseñar cosas más
+58:21
+grandes si recuerdan nuestro modelo
+58:23
+generador era una capa de tipo you need
+58:26
+antes explicado lo que era esto con lo
+58:28
+cual pues nos tenemos que preocupar de
+58:30
+diseñarla ya verán que no es tan
+58:32
+complicado si se fijan lo que estamos
+58:34
+haciendo aquí es definir una función
+58:36
+generator vale la función que va a ser
+58:39
+de generador en nuestra arquitectura y
+58:41
+en este caso pues lo primero que se hace
+58:43
+es especificar le una capa de entrada es
+58:45
+como decirle mirar a partir de este
+58:47
+punto en este punto te vamos a meter
+58:49
+una serie de datos que van a tener las
+58:51
+siguientes dimensiones estas dimensiones
+58:53
+son no no le decimos cuál es otra que no
+58:57
+le decimos cuál es y otra que le decimos
+58:59
+que son 3 por qué hacemos esto porque
+59:01
+estamos dejando abierto a que nuestra
+59:03
+imagen pueda tener diferentes tamaños
+59:05
+con lo cual esto corresponde atrás
+59:07
+correspondería con la el ancho de la
+59:09
+imagen la altura de la imagen y los
+59:12
+canales de color si sabemos que son tres
+59:13
+caras de color rgb
+59:15
+a partir de ahí lo que estamos creando
+59:17
+es una lista donde estamos declarando
+59:20
+cada uno de los bloques que van a
+59:22
+conformar a nuestra red de nuevo no
+59:24
+estamos conectando nada todavía
+59:26
+simplemente estamos diciendo oye vamos a
+59:29
+hacer un conjunto de bloques dónde va a
+59:31
+haber una capa de down samper con 64
+59:35
+filtros y donde no se aplique el bache
+59:37
+normalizase jon después una de 128
+59:40
+después 256 luego 502 seguimiento 12 512
+59:43
+512 512 de donde salen estos números de
+59:46
+nuevo del paper si nos venimos aquí
+59:49
+simplemente hemos declarado los bloques
+59:52
+que nos especifica el paper y la misma
+59:54
+estamos haciendo con el disco der ok 512
+59:56
+512 512 y luego a partir de aquí tienen
+60:00
+que ser capas que hagan el al sampling
+60:02
+pero que no tengan activado el drop out
+60:04
+pues de nuevo nos venimos para acá y le
+60:07
+decimos 500 a 512 de 512 se aplican el
+60:10
+drop out y a partir de aquí no me lo
+60:12
+apliques vale estoy viendo que en este
+60:14
+caso
+60:16
+en el código yo tenía definido por
+60:18
+defecto que esto estuviera afonso by
+60:20
+ahora tiene más sentido vale una cosa
+60:23
+interesante hacer siempre que estén
+60:24
+trabajando con capas y sobre todo si
+60:26
+están trabajando con imágenes es
+60:28
+mantener mediante comentarios o de
+60:31
+alguna manera un control sobre las
+60:33
+dimensiones de nuestras imágenes porque
+60:34
+siempre te va a permitir tener una idea
+60:37
+más clara de lo que estás haciendo ok
+60:39
+por ejemplo en este caso si yo le meto
+60:41
+una imagen estamos metiendo vamos a
+60:43
+pensar un lote de 50 imágenes nuestro
+60:45
+bat 6 es 50 pues qué dimensiones vamos a
+60:48
+tener de entrada vamos a tener bat 6 256
+60:52
+256 por tres canales de color cuando lo
+60:56
+pasamos por la capa town samper sabemos
+60:58
+que estas imágenes se están reduciendo a
+61:00
+la mitad de tamaño con lo cual las
+61:01
+dimensiones ahora van a hacer
+61:03
+la notaria most bad size de nuevo y la
+61:07
+mitad 256 128 128 y como estamos
+61:11
+generando 64 mapas de características
+61:14
+porque tenemos 64 filtros pues ahora la
+61:17
+dimensión la cuarta dimensión va a ser
+61:19
+64 filtros si esto lo vamos repitiendo
+61:22
+pues se divide se divide se divide se
+61:24
+divide se divide y el número de phil de
+61:27
+canales se corresponde con el número de
+61:29
+filtros que teníamos y de la misma
+61:30
+manera pues haríamos lo mismo con el
+61:32
+decodificador donde veríamos cómo la
+61:34
+imagen poco a poco después de llegar de
+61:37
+la parte del codificador pues se iría
+61:38
+ampliando ampliando ampliando y al final
+61:41
+tendríamos una imagen de 128 128 y 128
+61:45
+filtros faltaría todavía añadir una
+61:47
+última capa una capa más que te genere
+61:50
+la imagen que estás buscando por lo
+61:52
+tanto vamos a empezar con creando la
+61:55
+última capa vale esta última capa como
+61:58
+ya hemos dicho tiene que ser la que se
+61:59
+encargue el resultado de esta última
+62:01
+capa tiene que ser la imagen que estamos
+62:03
+buscando por lo cual si lo pensamos pues
+62:06
+esto debería ser algo así como
+62:08
+cappa convolución al de dos dimensiones
+62:11
+traspuesta decir una capa que también
+62:13
+basa en sampling porque venimos de una
+62:15
+imagen de 128 x 128 y en este caso el
+62:20
+número de filtros que debería tener esta
+62:21
+capa es lo que define el número de
+62:23
+canales que tiene el resultado lo que
+62:25
+sale y si queremos generar una imagen
+62:27
+tiene que tener 3 canales que son los
+62:29
+tres canales de color con lo cual tiene
+62:31
+sentido decirle que el número de filtros
+62:33
+que tiene que crear son tres filtros
+62:35
+vale el kernel 6 vamos a especificar de
+62:39
+nuevo
+62:42
+kernel seis de cuatro vale que eso no
+62:46
+varía lo especificaba el paper un strike
+62:48
+de dos para que suba
+62:50
+para que no complique el tamaño anterior
+62:52
+que era 128 x 128 padding podemos
+62:55
+ponerle nuevo el same
+62:59
+inicializa dor vale no hemos creado el
+63:01
+inicializa dor vamos a crear un inicial
+63:04
+hay ser de nuevo para que escribir se
+63:06
+puedes copiar vale perfecto 2 con esto
+63:09
+vamos a poner él
+63:11
+kernel inicial hay ser
+63:15
+sobre hoy al menos por un lado inicial
+63:18
+hay ser va directamente a podríamos
+63:22
+ponerlo como una capa aparte pero vamos
+63:23
+a ponerlo aquí vamos a especificar le el
+63:25
+tipo de capa de activación de esta capa
+63:27
+y el tipo de activación si lo piensan
+63:30
+nuestras imágenes vienen en el rango de
+63:32
+menos 1 a 1 con lo cual tendría sentido
+63:36
+en este caso hacer lo mismo y por tanto
+63:38
+especificar una capa de activación de
+63:40
+una tangente hiperbólica que es la que
+63:43
+tiene el dominio de salidas con unas
+63:44
+inmóviles pero en vez de 0 a 1 va de
+63:46
+menos 11 ok con esto técnicamente ya
+63:51
+tengamos el último bloque de todo
+63:52
+nuestro sistema y que sí generaría una
+63:55
+imagen pero de nuevo no hemos conectado
+63:57
+nada para conectarlo lo que podemos
+63:59
+hacer es un bucle for que vaya enterando
+64:03
+pues por cada una de las capas que
+64:05
+tenemos especificado en los dos stacks
+64:07
+por ejemplo podemos coger y decir for
+64:09
+down in down stack
+64:12
+y ahora si se fijan pues en cada
+64:13
+iteración la variable down va a ir
+64:16
+tomando cada una de las capas que
+64:17
+tenemos en nuestro stack con lo que
+64:19
+podríamos coger por ejemplo y decir mira
+64:21
+vamos a guardar en x el resultado de
+64:24
+coger nuestra capa down la que se vaya
+64:27
+asignando y pasarle el resultado del
+64:31
+iteración anterior que como la estamos
+64:33
+guardando en x pues la anterior también
+64:34
+va a ser x con lo cual si esto tú lo
+64:36
+repites muchas muchas veces estás
+64:38
+cogiendo el resultado de pasar el
+64:41
+procesamiento por una capa coges la
+64:43
+salida y se lo pasas a la siguiente
+64:45
+coges las salidas se lo pasan al
+64:46
+siguiente etc etc etc hasta haber pasado
+64:49
+todas las capas del down stack alguien
+64:51
+dirá pero carlos y cuál es la primera
+64:53
+entrada que le vamos a meter pues
+64:55
+efectivamente antes del bucle for habría
+64:57
+que decirle que la x es igual a inputs
+65:00
+que lo tenemos especificado aquí arriba
+65:01
+con esto lo que hemos hecho solamente
+65:05
+con estas dos líneas con este bucle form
+65:07
+ha sido conectar cada una de las capas
+65:09
+del decodificador tan sencillo como eso
+65:12
+gracias a quieras y tensor flow al igual
+65:15
+que con herramientas como pay torch es
+65:17
+súper sencillo diseñar redes neuronales
+65:19
+vale qué pasa ahora si queremos hacer el
+65:22
+decodificador pues tan sencillo como
+65:25
+coger y decir oye para y up in
+65:30
+apesta
+65:32
+en app está pues simplemente me vas
+65:36
+cogiendo y nueva guardando de nuevo en x
+65:39
+el resultado de pasarle la equis a cada
+65:42
+una de las capas como en el resultado lo
+65:44
+guarda es coger el resultado los guardas
+65:46
+etcétera cuando hemos terminado estos
+65:48
+dos bucles ya tendríamos el disco del y
+65:50
+el en code air todas las capas
+65:51
+conectadas y lo último que nos faltaría
+65:53
+sería pues pasarlo por la última capa
+65:57
+que como ya sabes la hemos definido como
+65:59
+last ok nosotros fácilmente podríamos
+66:02
+hacer esto así y lo que habríamos hecho
+66:05
+ahora mismo en nuestro generador sería
+66:07
+una arquitectura de tipo our class estas
+66:11
+que parecen un reloj de arena porque
+66:12
+vamos codificando y decodificando o sea
+66:16
+que ahora mismo ya hemos creado un
+66:17
+generador que podría funcionar en cierta
+66:19
+manera para resolvernos unos cuantos
+66:21
+problemas qué pasa que como mencionamos
+66:23
+en el vídeo esto para ciertos problemas
+66:26
+como lo que es generar una imagen puede
+66:28
+ser muy agresivo el hecho de que
+66:30
+tengamos que pasar toda la información
+66:31
+por un cuello de botella de tamaño uno
+66:33
+por ejemplo para solucionar eso pues ya
+66:35
+saben que lo que se puede utilizar
+66:37
+las script connections que son
+66:39
+básicamente conexiones que se van a
+66:41
+saltar pues el procesamiento de
+66:43
+determinadas capas y que si por ejemplo
+66:45
+tenemos una arquitectura en la que todos
+66:46
+los niveles del diw coder y del incoder
+66:48
+están conectados según el nivel al que
+66:52
+correspondan pues lo que tenemos a una
+66:53
+arquitectura de tipo you need que es la
+66:56
+que queremos implementar en este caso
+66:57
+entonces vamos a ver cómo lo podemos
+66:58
+hacer de manera sencilla cuando tenemos
+67:01
+una skip conexión en la you need lo que
+67:03
+cogemos es una capa de él en coder y la
+67:07
+conca tenemos al mismo nivel del
+67:09
+discover por lo cual lo que tenemos que
+67:12
+hacer aquí es de alguna manera según
+67:14
+estamos bajando por la fase de elenco
+67:16
+there y guardar todos los resultados que
+67:18
+vamos teniendo en esas capas y después
+67:21
+concatenar los y al mismo nivel que
+67:23
+tengamos en el de code air eso lo
+67:24
+podemos hacer de manera sencilla pues
+67:26
+nos creamos una variable s que
+67:28
+representa las script connections
+67:30
+y va a ser una lista donde vamos a ir
+67:33
+añadiendo según vamos bajando por el
+67:36
+incoder los diferentes elementos podemos
+67:40
+coger y decir añade me el resultado de
+67:45
+haberlo procesado en esta capa eso ya lo
+67:48
+tendríamos en ese ahora cuando hemos
+67:51
+terminado de pasar por el incoder lo que
+67:54
+tenemos que hacer es empezar a
+67:55
+conectarlos con el discover y el orden
+67:57
+va a ser el mismo en la concatenación
+67:59
+que tenemos que hacer de estas señales
+68:01
+va a ser la misma pero invertida es
+68:03
+decir la última capa que hemos metido en
+68:05
+nuestra lista ha de ser la primera que
+68:07
+tenemos que concatenar en él
+68:09
+en el disco der por eso tiene sentido
+68:12
+que cojamos aquí y la lista
+68:15
+de las skip conexión de los resultados
+68:18
+la invirtamos además en este caso el
+68:22
+último elemento que hemos guardado que
+68:23
+es el del cuello de botella no nos hace
+68:25
+falta con lo cual no podemos dejar ir
+68:27
+vale podemos cogerlos hasta el penúltimo
+68:30
+elemento y ya con eso pues podríamos
+68:33
+empezar a concatenar aquí
+68:36
+el resultado antes de pasarlo por
+68:38
+nuestra capa de sampling para concatenar
+68:41
+el resultado de dos capas pues
+68:43
+efectivamente que heras nos facilita una
+68:47
+función que se llama con catch de la
+68:50
+cual nos podemos aprovechar para hacer
+68:52
+esta concatenación entonces nosotros nos
+68:55
+podríamos venir ahora aquí y hay que
+68:58
+ponerlo exactamente después para
+69:00
+saltarnos así el cuello de botella la
+69:01
+primera vez entonces podemos decir oye x
+69:04
+ahora va a ser el resultado de llamar a
+69:07
+con catch con el resultado de
+69:11
+de equis y la skip conexión
+69:14
+correspondiente en este caso como
+69:16
+estamos integrando por objeto y no por
+69:18
+índice lo que podemos hacer es aquí
+69:22
+hacer una cremallera me gusta pensar que
+69:24
+estos cremalleras unas dos listas con la
+69:27
+lista de las skip connections con lo
+69:29
+cual ahora esto no te vuelve el up y no
+69:31
+te vuelve el skip la vamos a concatenar
+69:36
+ambos elementos ok con lo cual según
+69:39
+entramos al elenco del perdón al decoder
+69:41
+lo primero que hacemos es el up sampling
+69:43
+del cuello de botella con acá tenemos el
+69:46
+resultado con la primera script conexión
+69:48
+y eso va a ser el input de la siguiente
+69:49
+iteración lo superó con acá tenemos etc
+69:52
+etc etc automáticamente lo que hemos
+69:55
+hecho ha sido diseñar una you need ok
+69:58
+esto por sí solo podría haber sido un
+70:00
+tutorial perfecto para el canal porque
+70:02
+estas arquitecturas las you nets no sólo
+70:05
+sirven como elemento generador dentro de
+70:07
+una red generadora sino que son bastante
+70:09
+útiles como por ejemplo en problemas de
+70:12
+segmentación ok si tú tienes una imagen
+70:14
+y quieres segmentar por ejemplo el caso
+70:16
+típico una célula que te diga esto de
+70:18
+aquí es una célula cancerígena pues
+70:20
+utilizar kinect son son buenas
+70:23
+herramientas para este tipo de problemas
+70:25
+ok y ya ven qué sencillo es diseñar un
+70:27
+bicho de estos en este caso para
+70:30
+completar el generador yo aquí me he
+70:32
+calentado un poco y he puesto return
+70:34
+last pero como estamos utilizando el
+70:36
+modo funcional de qué era lo que tenemos
+70:38
+que hacer es
+70:40
+vamos a esto aquí y lo que tenemos que
+70:44
+hacer entonces es devolver un modelo
+70:47
+donde le vamos a especificar que los
+70:50
+inputs son
+70:52
+a ver el input va a ser la variable
+70:54
+inputs que tenemos arriba especificada y
+70:57
+el output de nuestro modelo viene
+70:59
+definido por la última capa que tenemos
+71:01
+aquí esto lo que va a hacer es construir
+71:03
+un modelo utilizando todas estas
+71:05
+conexiones y va a ser el objeto que ya
+71:07
+nosotros podremos utilizar como un
+71:09
+bloque entero para para hacer un modelo
+71:12
+generador en este caso para comprobar
+71:15
+que el generador funciona por lo que
+71:16
+podemos hacer es instancia nos un
+71:19
+generador de los que acabamos de crear
+71:21
+vamos a ejecutarlo a ver si se queja
+71:25
+vale se queja del app en apenas ven a
+71:29
+pen
+71:30
+vale porque la función append no te
+71:33
+devuelve nada directamente tenía del
+71:35
+objeto con lo cual esa línea estaba mal
+71:36
+y ahora debe vale se queja keywords
+71:40
+argumento understood inputs estamos aquí
+71:45
+inputs inputs
+71:49
+vale va a ser aquí outputs vale lo
+71:54
+ejecutamos y parece que funciona vale
+71:58
+como sabemos que funciona lo que podemos
+71:59
+hacer me va a copiar una línea de código
+72:01
+de que para ir un poco más rápido vamos
+72:03
+a llamar a nuestro generador el que
+72:05
+hagamos de instancia y le vamos a pasar
+72:07
+una imagen para ver cómo cómo la
+72:10
+interpreta ok en este caso pues vemos
+72:13
+que como está el generador instancia do
+72:16
+aleatoriamente esta no ha sido entrenado
+72:18
+todavía pues lo que nos genera es basura
+72:21
+pero no se ha quejado y el resultado es
+72:23
+que nos ha generado una imagen de 256
+72:25
+por 256 con tres canales de color que
+72:28
+interpretado como una imagen es decir
+72:30
+nuestro generador parece que de momento
+72:33
+está bien
+72:35
+cuando tenemos el generador creado pues
+72:37
+ya tenemos uno de los elementos
+72:38
+importantes
+72:40
+implementado dentro de nuestra red
+72:42
+generativa adversaria pero faltaría la
+72:44
+otra parte que cuál es el discriminador
+72:47
+la tarea del discriminador pues tiene
+72:49
+que ser la de observar el resultado del
+72:51
+generador y decir si el resultado lo que
+72:54
+está generando es cierto o es falso
+72:56
+respecto a lo que él considera que
+72:59
+debería ser una imagen correcta qué pasa
+73:01
+en este paper en vez de utilizar un
+73:03
+general un discriminador tradicional
+73:06
+como podría ser una red convolución al
+73:08
+que te lleva un resultado final a un
+73:10
+escalar que te indique si esta imagen es
+73:12
+cierta o esta imagen es falsa lo que
+73:15
+utilizan es un tipo de red denominada
+73:17
+patxi can vale la patch icann es lo
+73:21
+mismo es la misma idea de lo que acabo
+73:22
+de explicar una red convolución 'la pero
+73:25
+con una única diferencia y es que en vez
+73:27
+de llegar a un resultado final de un
+73:28
+único valor lo que te va a devolver es
+73:31
+una cuadrícula donde se van a evaluar
+73:33
+diferentes porciones diferentes parches
+73:35
+de ahí su nombre de la imagen original
+73:37
+con lo cual a lo mejor en vez de obtener
+73:40
+un único número final lo que está
+73:42
+recibiendo es una cuadrícula en la que
+73:45
+le dice mira
+73:46
+de arriba el trozo de la esquina de
+73:48
+arriba parece que es verdadero el
+73:50
+siguiente trozo superponiendo se parece
+73:54
+un poco falso este de aquí parece un
+73:55
+poco cierto este pasa un poco falso con
+73:57
+eso lo que se está consiguiendo es crear
+74:00
+un sistema donde no nos preocupamos de
+74:02
+si toda la imagen parece cierta pero
+74:06
+simplemente nos fijamos en que ciertas
+74:08
+regiones tengan que ser realista se
+74:11
+entiende más o menos a esta idea
+74:12
+entonces como simplemente una práctica
+74:15
+pues tenemos dos opciones una pensarlo o
+74:18
+dos leer nos el paper si no venimos a el
+74:19
+paper vemos que nos lo explican aquí y
+74:22
+esta codificación ya la conocemos esto
+74:24
+es lo mismo que teníamos antes son los
+74:26
+mismos bloques y lo único que nos viene
+74:28
+a decir es que un discriminador aquí
+74:30
+viene implementado con los bloques de
+74:34
+convolución batch nor y reno y además
+74:37
+aquí nos indicaba además que las
+74:38
+convulsiones en el discriminador son
+74:40
+también da un sampling down sampling de
+74:43
+factor 2 con lo cual esta descripción de
+74:46
+aquí no deja de ser una red neuronal
+74:48
+convolución al pero no en la que nos
+74:51
+vamos a acabar con un valor final sino
+74:52
+que simple
+74:53
+pues vamos a cortarla en un punto y
+74:55
+vamos a silbar después que nos queda
+74:57
+resultados aquí una imagen de 30 x 30
+75:00
+pues son 30 regiones las que estamos
+75:02
+evaluando se entiende la idea perfecto
+75:05
+pues vamos a implementarlo por tanto
+75:07
+para hacernos el discriminador vamos a
+75:09
+hacernos de nuevo una función como hemos
+75:11
+hecho antes le llamamos discrimina aitor
+75:14
+y en este caso si se dan cuenta no vamos
+75:17
+a tener solamente un único input sino
+75:20
+que vamos a tener dos porque porque el
+75:22
+discriminador su tarea va a ser la de
+75:23
+coger la imagen generada por el
+75:25
+generador observarla y decir oye esta
+75:28
+imagen me parece real o no me parece
+75:29
+real pero qué pasa que en este caso es
+75:31
+discriminador al igual que pasa con el
+75:32
+generador está condicionado vale con
+75:35
+discriminador condicional y eso
+75:37
+significa que el discriminador también
+75:38
+tiene acceso a la imagen original que
+75:41
+estamos metiéndole al generador al
+75:43
+garabato de la flor
+75:45
+así que básicamente su tarea sería algo
+75:47
+así como yo te voy a decir si esta
+75:49
+imagen es cierta no es cierta la que ha
+75:51
+generado el generador en función del
+75:54
+input que tú me has pasado vale es decir
+75:56
+esta imagen que ha generado sí parece
+75:59
+que se corresponde o que no parece que
+76:00
+se corresponde al input que me ha pasado
+76:02
+eso significa que aquí lo que tenemos
+76:05
+que definir pues son en vez de un input
+76:06
+dos inputs vamos a empezar con el
+76:08
+primero especificamos una save de
+76:13
+y tres canales de color y le vamos a
+76:16
+poner un nombre para identificar la que
+76:18
+se imputó y mitch vale esta línea la
+76:21
+podemos duplicar y ahora podemos poner
+76:24
+que la otra es la de él
+76:28
+la del generador y ya está le vamos a
+76:30
+llamar james ok qué pasa que ahora
+76:35
+tenemos dos imágenes claro esto cuando
+76:37
+se ha procesado por el por el
+76:39
+discriminador de alguna manera tiene que
+76:41
+estar combinadas estas dos imágenes con
+76:43
+lo cual podemos hacer lo que ya hicimos
+76:45
+antes que era decir oye voy a coger esta
+76:47
+imagen y esta imagen y la voy a poner
+76:49
+una encima de otra las voy a mi lado
+76:50
+aquí esto lo podemos hacer con la
+76:54
+función concatenar concatenar a la cual
+76:58
+le podemos decir oye concatena me esta
+77:01
+imagen de aquí y esta imagen de aquí con
+77:04
+lo cual esto nos estaría devolviendo un
+77:05
+tensor que tendría de tamaño pues bat
+77:08
+size por 256 por 256 por 6 que son dos
+77:14
+veces el número de canales que tenemos a
+77:16
+partir de ahí el resto del discriminador
+77:17
+pues no tiene mucha más ciencia vale es
+77:20
+simplemente ir siguiendo las pautas que
+77:22
+te indica el paper que nos en este caso
+77:25
+estamos discriminador correcto sino este
+77:27
+de aquí el de 70 por 70 y que viene
+77:30
+especificado por un bloque de 64 unos
+77:33
+128 150
+77:34
+512 después de la última capa se aplica
+77:37
+una combo lución que tiene que ser
+77:39
+unidimensional seguido de la función
+77:41
+sigmoide y igual que antes pues la capa
+77:45
+de bachín normalizase jon no se
+77:46
+aplicaría al primer bloque de 64 toda la
+77:49
+resolución de tipo liquid y con
+77:51
+pendiente 0 con 2 por tanto si nos
+77:53
+venimos aquí vemos que lo que hemos
+77:55
+definido es exactamente eso tenemos al
+77:57
+inicializa d'or tenemos la primera capa
+78:00
+con el filtro de 64 filtro 128 256 y 512
+78:06
+al final tenemos que definir una última
+78:08
+capa que tiene que tener un único filtro
+78:11
+de salida porque porque necesitamos que
+78:13
+sólo haya un canal en este caso la
+78:14
+imagen que estamos generando pensemos
+78:17
+que es una imagen donde se va a definir
+78:19
+por cada pixel de esa imagen si la
+78:21
+región de la imagen original pues parece
+78:23
+real o no parece real en este caso es el
+78:27
+único sentido que tiene esta imagen y
+78:28
+por eso solamente necesitamos un único
+78:30
+canal de información que lo conseguimos
+78:33
+pues poniendo el filtro igual a uno el
+78:35
+resto se mantiene igual que en el 6 a 4
+78:37
+es 30 1 el canal inicial a ser que hemos
+78:40
+definido y él
+78:41
+a 6 por tanto nuestro modelo el modelo
+78:45
+discriminador el que vamos a devolver
+78:46
+pues es este de aquí vale te efe que
+78:49
+erasmo del inputs la en este caso lo
+78:52
+tenemos que definir que el input es el
+78:54
+ine y el gen que le estamos pasando
+78:57
+arriba y el output es el resultado de la
+78:59
+capa last si queremos comprobar si el
+79:01
+discriminador está correcto pues al
+79:03
+igual que hemos hecho antes lo que
+79:05
+tenemos que hacer es instancia lo
+79:07
+ejecutarlo y ver que todo está bien por
+79:11
+ejemplo aquí falta dos puntos
+79:15
+parece en principio que está bien y al
+79:18
+igual que hicimos antes pues también
+79:19
+podemos comprobar qué tal funciona
+79:21
+cogiendo al discriminador y pasándole
+79:23
+como input en este caso la imagen de
+79:26
+entrada es decir la imagen que estamos
+79:27
+pasando al generador y el resultado que
+79:30
+hemos obtenido de antes cuando hemos
+79:32
+ejecutado el generador el output de lo
+79:35
+que ha generado vale vamos a pasarle
+79:36
+estas dos imágenes y vamos a visualizar
+79:38
+cuál es el resultado que obtenemos si
+79:41
+esto lo hacemos
+79:42
+y todo va bien pues podemos ver que esto
+79:45
+sería un ejemplo del resultado que nos
+79:48
+puede ofrecer el generador donde tenemos
+79:50
+diferentes pixeles con diferentes
+79:52
+colores y por ejemplo pues aquí estaría
+79:54
+evaluando esta intensidad de azul fuerte
+79:57
+nos estaría diciendo que el
+79:58
+discriminador que de momento no está ni
+80:01
+entrenado pues está detectando toda esta
+80:03
+área de aquí todos estos estos parches
+80:06
+de la imagen original como poco
+80:08
+realistas o falsos ok se entiende más o
+80:11
+menos la idea perfecto con esto ya
+80:15
+tenemos los dos elementos importantes de
+80:17
+nuestra red generativa tenemos los dos
+80:19
+bloques que conformarían el
+80:21
+adr degenerativas adversarias lo que
+80:24
+faltaría ahora sería diseñar una función
+80:27
+de coste que es lo que se conoce como
+80:28
+función del coste adversaria que
+80:30
+básicamente es la que va a unir el
+80:33
+resultado de una con el resultado de
+80:34
+otra y va a ser que durante el
+80:36
+entrenamiento estén compitiendo ok para
+80:40
+hacer esto lo que tenemos que hacer es
+80:41
+definir lo que van a hacer las funciones
+80:43
+de coste y en este caso vamos a empezar
+80:45
+definiendo un objeto que nos va a servir
+80:47
+para evaluar el resultado de las
+80:50
+imágenes que vayamos obteniendo aquí en
+80:51
+este caso pues podemos aprovecharnos de
+80:53
+la función definida en quieras
+80:56
+binary cross entropía que básicamente lo
+80:59
+que va a hacer es calcular la entropía
+81:01
+cruzada de cada uno de los píxeles de
+81:03
+las imágenes que estamos obteniendo esto
+81:06
+lo vamos a hacer y también vamos a
+81:07
+activar el parámetro from logic y le
+81:10
+vamos a decir que se ponga true
+81:12
+para que las imágenes que nosotros
+81:14
+obtengamos como entrada pues se
+81:16
+normalicen pasando las por una función
+81:18
+sigmoides para acotar las al dominio de
+81:20
+0 y 1 algo que además el paper nos pedía
+81:22
+que tenemos que hacer si recuerdan
+81:25
+aquí antes leímos esta frase nos decía
+81:27
+seguido de una función sigmoide en este
+81:30
+caso al activar el frame logic y una
+81:31
+truck pues consigue ese efecto a partir
+81:34
+de ahí pues vamos a evaluar el
+81:35
+comportamiento del discriminador con dos
+81:37
+componentes diferentes por un lado
+81:39
+tenemos el rial 2 y por el otro lado
+81:41
+tenemos el generated los el bryant logs
+81:43
+lo que está haciendo si se fijan es
+81:46
+utilizar el objeto de la función del
+81:48
+binary cross entropy para computar para
+81:50
+evaluar la diferencia entre dos cosas
+81:52
+por un lado tenemos el resultado del
+81:56
+discriminador al observar una imagen
+81:57
+real y esto lo tenés que lo estamos
+82:00
+comparando con lo que sería el resultado
+82:01
+idóneo pues sería el resultado de idóneo
+82:04
+pues sería si él discriminador estuviera
+82:06
+observando una imagen real lo que
+82:08
+debería estar evaluando lo que debería
+82:11
+estar generando como salida tendría que
+82:13
+ser un en una imagen como la que tenemos
+82:15
+aquí arriba en la que todos los píxeles
+82:17
+estuvieran activados para decir ay esto
+82:20
+es real esto lo estamos consiguiendo
+82:22
+aquí diciéndole oie calcula me la
+82:24
+diferencia entre lo que has observado al
+82:27
+observar la imagen real y una matriz del
+82:30
+tamaño de la imagen
+82:31
+que esté todo a unos vale es una matriz
+82:35
+donde todos los valores están aún todos
+82:36
+los valores aún nos indican que la
+82:38
+imagen observada real si el
+82:40
+discriminador estuviera funcionando bien
+82:42
+esta imagen de aquí debería parecerse a
+82:45
+esta de aquí con lo cual el
+82:47
+discriminador estaría detectando que
+82:48
+todo es real y la función de coste
+82:51
+debería de dar un error bajito al
+82:54
+diferenciar ésta con ésta se entiende
+82:56
+más o menos la idea esta misma idea es
+82:59
+lo que se hace cuando calculamos el
+83:01
+generating blogs en los lo que estamos
+83:03
+haciendo es comprobar el resultado del
+83:06
+discriminador al observar la imagen que
+83:10
+ha sido generada por el generador y en
+83:12
+este caso lo que deberíamos de observar
+83:15
+lo que sería el resultado idóneo para él
+83:16
+discriminador sería una matriz del
+83:19
+tamaño de la imagen obtenida pero en el
+83:22
+que todos los valores que estuvieran a
+83:24
+cero o lo que es lo mismo que el
+83:25
+discriminador estuviera diciendo
+83:27
+a ver todo lo que hay en esta imagen
+83:29
+todos los píxeles que estoy observando
+83:30
+son falsos vale todos los parches que
+83:33
+estoy viendo aquí están mal son todos
+83:36
+cero son falsos
+83:38
+si esto fuera así el comportamiento del
+83:40
+generador si la imagen que ha generado
+83:43
+al observar el resultado del generador
+83:45
+fuera parecida a esta de aquí entonces
+83:48
+también estaríamos obteniendo un error
+83:50
+muy bajo y el generating 2 sería abajo
+83:52
+estas dos componentes juntas estarían
+83:55
+evaluando si el comportamiento del
+83:56
+discriminador es el que se espera o no
+83:59
+finalmente cogemos estas dos componentes
+84:01
+las sumamos computamos el total
+84:03
+discriminatorios y este es el valor que
+84:05
+definirá a nuestro discriminatorios se
+84:08
+entiende parece muy complicado pero en
+84:11
+realidad son conceptos muy muy sencillos
+84:13
+por el contrario la evaluación del
+84:15
+generador va a ser diferente el
+84:17
+generador tiene dos objetivos uno de
+84:20
+ellos es generar una imagen que sea
+84:22
+realista que se parezca al resultado a
+84:24
+la imagen real que queremos conseguir si
+84:26
+está generando una margarita pues se
+84:28
+tiene que parecer a la imagen final de
+84:29
+la margarita esto se entiende pero
+84:32
+también su otra labor puesto que esto va
+84:34
+a ser una competición entre el
+84:36
+discriminador y el generador va a ser
+84:38
+conseguir que el error del discriminador
+84:40
+se maximice es por eso que en este caso
+84:43
+generator los
+84:44
+pasamos tres objetos diferentes por un
+84:46
+lado le pasamos el generating output la
+84:48
+imagen que ha generado el generador y
+84:51
+también la imagen que esperábamos que
+84:53
+generara no la imagen real de la
+84:54
+margarita y la imagen de la margarita
+84:56
+que él ha creado y por otra parte lo que
+84:59
+le estaríamos pasando es el discrimen
+85:00
+editor generating output es decir de
+85:02
+nuevo el mapa que ha generado el
+85:04
+discriminador al observar su imagen a
+85:07
+partir de ahí pues vamos a computar dos
+85:09
+componentes de error diferentes por un
+85:11
+lado es el error adversario como tal que
+85:14
+es la diferencia entre el resultado del
+85:18
+discriminador al observar la imagen
+85:20
+generada y lo que él querría que fuera
+85:24
+el resultado que básicamente que él
+85:26
+discriminador viera esa imagen y dijera
+85:28
+oye todo esto son unos todo esta imagen
+85:30
+es verdadera ese tendría que ser el
+85:33
+resultado idóneo para el generador que
+85:35
+básicamente se basaría en evaluar si
+85:36
+está engañando o no al discriminador si
+85:39
+se fijan esta componente de aquí es
+85:41
+concretamente la contraria al generated
+85:43
+los que hemos especificado arriba aquí
+85:46
+poníamos ceros y en este caso serían
+85:48
+unos
+85:48
+esta es la parte donde divergen las
+85:50
+funciones de coste y donde se establece
+85:52
+toda la componente adversaria de nuestro
+85:54
+sistema por el contrario también tenemos
+85:57
+el l1 los que básicamente la diferencia
+86:00
+por píxeles en valor absoluto
+86:04
+entre la imagen real que queríamos
+86:06
+generar y la imagen que hemos generado
+86:07
+esto es básicamente computer aquí la
+86:10
+fórmula del error absoluto medio vale la
+86:12
+diferencia entre las dos imágenes valor
+86:14
+absoluto y calcular la media con esto ya
+86:17
+tendríamos las dos componentes
+86:18
+necesarias para calcular nuestro
+86:21
+generator los aquí no pasa como en él
+86:25
+discriminador donde las dos componentes
+86:26
+se suman por igual sino que tenemos un
+86:28
+híper parámetro lambda que nos va a
+86:30
+servir para regular si queremos añadir
+86:32
+un mayor grado de error de una
+86:34
+componente o de la otra en este caso el
+86:37
+paper te especifica que un valor óptimo
+86:39
+es un valor de lambda de 100 donde le
+86:41
+estaríamos dando 100 veces más peso al
+86:43
+error l 12 que al error adversario vale
+86:48
+pues tal cual lo explica el paper puesto
+86:51
+al cual lo definimos nosotros aquí con
+86:53
+esto calculamos el total generator nos y
+86:55
+este es el valor que va a devolver
+86:57
+nuestro generator los con esto ya
+87:00
+tendríamos casi todo lo importante de
+87:02
+cara este tutorial implementado vale
+87:04
+todavía falta una última celda que
+87:06
+quiero explicar
+87:08
+pero antes voy a daros unas cuantas
+87:10
+otras celdas con líneas de código que
+87:12
+van a ser importante de cara a entrenar
+87:14
+a todo el sistema pero de las cuales no
+87:16
+me quiero parar mucho porque si no este
+87:17
+tutorial se va a hacer eterno pero bueno
+87:20
+una de estas celdas es la siguiente vale
+87:22
+además de definir los optimizadores que
+87:24
+esto sí es importante hacerlo vale en
+87:27
+este caso estamos utilizando adam como
+87:29
+sistema para optimizar a todas nuestras
+87:30
+funciones con los híper parámetros que
+87:33
+nos especifica el paper
+87:35
+pues además de esto tenemos la siguiente
+87:38
+línea de código que lo que estamos
+87:40
+haciendo aquí es guardar check points
+87:42
+guardar estados de la ejecución del
+87:45
+entrenamiento de nuestro sistema lo que
+87:48
+nos va a permitir los check points que
+87:49
+lo vamos a guardar en el check paz que
+87:51
+hemos definido al principio del tutorial
+87:52
+pues va a hacer que guardemos el estado
+87:55
+de los optimizadores tanto del generador
+87:57
+como el discriminador y también de los
+87:59
+objetos que andrei ter y discrimen aitor
+88:01
+con esto si por ejemplo tú estás
+88:03
+trabajando con google colar y el sistema
+88:05
+se te cae y a lo mejor y vas por la
+88:07
+época número 113 pues te va a permitir
+88:11
+poder restaurar utilizando la siguiente
+88:14
+línea de código
+88:16
+te va a permitir conectarte a tu google
+88:18
+drive donde has ido guardando los
+88:20
+diferentes estados de tu sistema y
+88:22
+obtener el último checkpoint que haya
+88:24
+guardado a lo mejor fue en la época
+88:25
+número 100 con eso pues no tienes que
+88:28
+volver a repetir todo la ejecución del
+88:30
+sistema y es algo bastante cómodo a
+88:32
+tener en cuenta otra celda interesante a
+88:34
+copiar es la siguiente de aquí generate
+88:36
+images que básicamente lo que nos va a
+88:38
+servir es para ir evaluando cómo es el
+88:40
+comportamiento del modelo generador que
+88:42
+estamos entrenando durante el
+88:44
+entrenamiento básicamente este esta
+88:46
+función lo que nos permite es pasarle al
+88:48
+generador imágenes de nuestro set de
+88:50
+prueba como podemos ver aquí vale
+88:53
+estamos cogiendo test input y se lo
+88:55
+estamos pasando a nuestro modelo y al
+88:57
+mismo tiempo también
+88:59
+podemos guardar estos estas imágenes que
+89:02
+estamos generando en algún directorio
+89:03
+que nosotros no especificamos y podemos
+89:05
+también visualizar el input el output y
+89:08
+el resultado esperado vale así que
+89:10
+conviene esta línea de código porque nos
+89:11
+van a servir a continuación y finalmente
+89:14
+el último bloque de código que les voy a
+89:15
+pedir que copien es el siguiente de aquí
+89:17
+que es el que define nuestra rutina de
+89:19
+entrenamiento
+89:20
+a esta función lo que le pasamos es el
+89:23
+data set con el que queramos trabajar ya
+89:25
+sea el de entrenamiento o el de test y
+89:27
+el número de épocas que queramos que se
+89:29
+cumplan a partir de aquí pues se va a
+89:31
+alterar vamos a ir recorriendo todas las
+89:33
+épocas y vamos a coger para cada imagen
+89:35
+y cada imagen de entrada y cada imagen
+89:38
+objetivo en nuestro data set y se la
+89:40
+vamos a pasar una función 30 step que
+89:42
+vamos a pasar a definir ahora vale que
+89:44
+es la última que nos faltaría por
+89:45
+implementar
+89:47
+y además se va a ir visualizando pues
+89:49
+información de en qué época estamos en
+89:51
+que este estamos y también cada vez que
+89:55
+acabemos una época pues vamos a tomar
+89:57
+imágenes de nuestro data set de prueba y
+90:00
+vamos a llamar a la función anterior a
+90:01
+generate images y le vamos a pasar el
+90:03
+generador el input el target y le vamos
+90:06
+a pedir que nos guarde las imágenes del
+90:07
+data set de pruebas en una carpeta de
+90:09
+nuestro directorio de google drive con
+90:11
+esto pues podemos ir guardando del data
+90:14
+set de prueba la evolución de cómo se
+90:16
+van generando las imágenes para obtener
+90:18
+luego animaciones chulas de cómo ha sido
+90:19
+el entrenamiento por tanto lo último que
+90:22
+nos faltaría para acabar todo este
+90:24
+embrollo de código sería definir este
+90:26
+train step vale ésta va a ser el el
+90:28
+último bloque de código que vamos a
+90:30
+implementar y donde básicamente vamos a
+90:32
+terminar de conectar todos los módulos
+90:34
+que hemos ido implementando del
+90:36
+generador discriminador que esto ya
+90:37
+están conectados
+90:39
+en las funciones de coste pero que
+90:40
+todavía no hemos dicho cómo se van a ir
+90:42
+ejecutando en cada paso del
+90:44
+entrenamiento entonces vamos a crearnos
+90:46
+de una celda aquí arriba y vamos a crear
+90:49
+la función train
+90:51
+esta función cada vez que la llamemos
+90:53
+como podemos ver que estamos pasando en
+90:55
+la imagen de entrada el garabato de
+90:57
+nuestra flor y la imagen resultante que
+90:59
+nos gustaría obtener porque recordemos
+91:01
+que esto deja de ser aprendizaje
+91:03
+supervisado entonces en este caso pues
+91:05
+vamos a definir exactamente esto no
+91:07
+input image y target y entonces como se
+91:11
+sucede la obra de teatro pues la obra de
+91:13
+teatro comienza con el generador el
+91:16
+generador va a tomar como entrada
+91:17
+efectivamente la imagen de entrada en
+91:21
+nuestro sistema el garabato de la flor
+91:23
+esta imagen pues va a ser comprimida por
+91:25
+el incoder va a ser de comprimida por el
+91:26
+decoder y vamos a obtener una imagen de
+91:28
+salida esto es el output y micha
+91:33
+en todo este proceso como estamos
+91:35
+entrenando al sistema pues le vamos a
+91:37
+decir que efectivamente los parámetros
+91:40
+del generador se entrenen en este paso a
+91:43
+partir de ahí el discriminador pues va a
+91:46
+tener que hacer dos tareas primero va a
+91:48
+ser observar lo que ha generado el
+91:50
+generador y obtener el output james del
+91:54
+discriminador esto lo hacemos pues
+91:57
+llamando al discriminador
+91:59
+terminator y pasándole por una parte el
+92:03
+output email
+92:05
+que ha generado antes en el paso
+92:07
+anterior el generador y por otro lado el
+92:10
+input image porque recordemos que es un
+92:13
+discriminador condicional y que también
+92:15
+tiene acceso a la imagen de entrada de
+92:17
+nuevo como queremos que se entrene vamos
+92:20
+a especificar training truck el otro
+92:23
+paso que tiene que hacer el
+92:25
+discriminador va a ser tomar la imagen
+92:27
+real
+92:28
+la imagen objetivo y esto lo vamos a
+92:30
+llamar
+92:32
+output
+92:35
+target
+92:37
+target describen héctor y lo que va a
+92:39
+obtener aquí es
+92:42
+va a observar pues si el target la
+92:45
+imagen target la imagen que nosotros
+92:47
+esperamos va a evaluar la a ver si es
+92:50
+real o no es real
+92:51
+ok y en este caso también accede al
+92:53
+imputen bridge con estas tres
+92:56
+componentes ya calculadas pues ya lo que
+92:57
+podemos hacer es llamar a nuestras
+92:59
+funciones de discriminarlos y generator
+93:02
+los que hemos definido anteriormente y
+93:04
+que por cierto no hemos ejecutado vamos
+93:07
+a ejecutarla ejecutar la ejecutarla
+93:13
+ejecutar esto también esto de error
+93:17
+esto lo arreglamos ahora
+93:20
+enterate images vale perfecto y estamos
+93:23
+aquí entonces por ejemplo el
+93:26
+discriminatorios discrimine y tornos que
+93:28
+recibe el discrimen editor real output y
+93:31
+el discrimen editor generated output
+93:33
+primero el real y luego el generado pues
+93:36
+vamos a definir al describir entornos
+93:38
+como el resultado de llamar a la función
+93:40
+de costes discriminatorios que tenemos
+93:42
+aquí abajo y de pasarle el resultado
+93:45
+observar la imagen real la imagen target
+93:47
+en este caso lo tenemos el resultado lo
+93:50
+tenemos en output target me lo copió de
+93:53
+aquí por un lado está y por otro lado
+93:56
+esto de aquí de esta manera ya
+93:58
+tendríamos conectado el resultado del
+94:00
+discriminador con su función del coste y
+94:02
+ya tendríamos calculado lo que sería el
+94:04
+discriminatorios por otro lado el
+94:06
+generator los si recuerdan lo que hacía
+94:10
+uso lo que tomaba como entrada era por
+94:12
+una parte en la observación del
+94:15
+discriminador a la imagen que le había
+94:16
+generado en la imagen que había generado
+94:18
+y la imagen objetivo que estábamos
+94:20
+buscando pues esto mismo lo que le vamos
+94:22
+a pasar
+94:24
+vamos a pasarle al
+94:27
+y al editor los
+94:29
+que estoy perdiendo la voz de tanto
+94:31
+hablar
+94:33
+tiqui tiqui tiqui tiqui a gala también a
+94:36
+ejecutar hasta hacerla con lo cual no me
+94:37
+deja acceder de nuevo tomamos el output
+94:41
+generator discriminador tomamos el
+94:44
+output image
+94:46
+y tomamos el target email que es la
+94:50
+imagen objetivo a partir de aquí si se
+94:52
+dan cuenta ya tendríamos ejecutados
+94:54
+todos los pasos para computar esta
+94:57
+función de coste pero recordemos que en
+94:59
+una red neuronal en una arquitectura
+95:01
+simple pues tú tienes tu input consigues
+95:03
+tu butt consigues la evaluación de la
+95:06
+función de error pero todavía nos
+95:07
+faltaría hacer el proceso de
+95:09
+optimización no dar ese paso de bach
+95:10
+preparation etcétera esto como lo vamos
+95:13
+a hacer aquí pues nosotros lo que
+95:14
+tenemos que hacer es decirle oye tenemos
+95:16
+que coger los gradientes tienes que
+95:19
+calcular los tus solos en tensor flow
+95:21
+que eras te lo van a ser automáticamente
+95:23
+que son maravillosos y a partir de esos
+95:26
+gradientes pues te tienes que optimizar
+95:28
+como especificamos eso pues primero
+95:30
+tenemos que definir un par de objetos
+95:33
+aquí arriba estos objetos son el
+95:35
+gradiente tape y ahora les explico que
+95:38
+es del generador quien tape y por otro
+95:41
+lado el grade weekend
+95:44
+de nuevo del discriminador
+95:49
+que son estos objetos que es el creyente
+95:50
+bueno si recuerdan
+95:53
+nosotros estamos utilizando tensor flow
+95:55
+o podríamos utilizar pay torch porque
+95:57
+nos aporta una ventaja muy grande frente
+95:59
+a implementarlo todo desde cero más allá
+96:01
+de las apis y de todas las funciones que
+96:03
+nos ofrezcan
+96:04
+y es que estos sistemas son sistemas de
+96:05
+auto diferenciación esto significa que
+96:08
+todas las operaciones que nosotros
+96:09
+estamos registrando no tenemos que
+96:11
+calcular todas las derivadas de las
+96:13
+operaciones que estamos registrando en
+96:15
+nuestra arquitectura si recuerdan cuando
+96:17
+hicimos el tutorial de cómo programar
+96:19
+una red neuronal desde cero había un
+96:21
+apartado en el que cuando implementado
+96:22
+un pack propague sesión pues teníamos
+96:24
+que calcular a papel y boli pues todas
+96:27
+las derivadas parciales y luego
+96:28
+implementarlas este paso es un coñazo y
+96:31
+por suerte todos estos sistemas como
+96:33
+digo tensor flow by torch nos ofrecen
+96:35
+esta solución de auto diferenciación la
+96:37
+auto diferenciación se puede lograr de
+96:39
+maneras muy diferentes con el grafo
+96:40
+computacional con los grade en types
+96:43
+y actualmente tensor flow pues ha
+96:45
+implementado este sistema de creyente
+96:47
+que creo que es similar a lo que utiliza
+96:50
+pay torch vale entonces cuando nosotros
+96:52
+aquí estamos definiendo el objeto creed
+96:53
+en tape es básicamente el objeto que nos
+96:56
+va a permitir acceder a los gradientes y
+96:58
+optimizar nuestros pesos es básicamente
+97:01
+el paso de back pro pasión pero de una
+97:04
+manera mucho más guay por ejemplo si
+97:06
+quisiéramos calcular cuáles son los
+97:07
+gradientes del generador pues lo que
+97:09
+podríamos hacer es generar una variable
+97:10
+aquí y en el editor gratis y utilizando
+97:13
+el objeto de arriba el tener héctor tape
+97:14
+le podemos decir registra me las
+97:17
+operaciones y calcula me los gradientes
+97:19
+de pues esos gradientes de optimizar mi
+97:24
+función de costes del generador
+97:26
+para optimizar todos los parámetros que
+97:28
+conforman a mi generador entonces le
+97:30
+tenemos que especificar cuál es el
+97:31
+generator los que en este caso tenemos
+97:33
+al objeto y en el editor los y también
+97:36
+tenemos que especificar que el generador
+97:38
+tiene todas estas distintas
+97:42
+training verbos vale más que serían
+97:45
+todos los parámetros de nuestro
+97:46
+generador
+97:48
+con esto pues ya tendríamos calculada de
+97:50
+manera automática pues todos los
+97:53
+gradientes que necesitamos para
+97:55
+optimizar en cada paso del entrenamiento
+97:57
+a nuestro generador de la misma manera
+97:59
+pues podemos registrar lo mismo para el
+98:02
+discriminador calculando discriminador
+98:04
+grados que sería el discriminador tape
+98:07
+punto grade dientes del discrimina y
+98:09
+tornos
+98:11
+y esto sería el discrimen héctor
+98:14
+brainable
+98:17
+ok con esto ya tendremos calculados los
+98:20
+gradientes del generador y del
+98:22
+discriminador ahora solamente faltaría
+98:24
+hacer el paso de optimizar no aplicar
+98:26
+esos gradientes y actualizar los valores
+98:28
+de los parámetros en función de estos
+98:30
+gradientes que hemos calculado esto lo
+98:33
+podemos conseguir pues llamando al
+98:34
+optimizador es que hemos definido
+98:36
+anteriormente que se recuerda lo tenemos
+98:38
+aquí arriba helado optimizer y llamando
+98:41
+a una función que es a plane writing que
+98:46
+es la que se va a encargar de aplicar
+98:47
+estos gradientes en función de cómo el
+98:50
+optimizador decida trabajarlo según como
+98:52
+sea la manera de trabajar de adam
+98:54
+utilizando momentos no utilizando pues
+98:56
+las diferentes técnicas que tiene para
+98:59
+eso lo que te pide que le pases es por
+99:00
+un lado los gradientes que ha calculado
+99:02
+que hemos calculado anteriormente y en
+99:05
+el editor gratis y por otro lado le
+99:07
+tenemos que pasar cuáles son esas de
+99:10
+nuevo variables que vamos a optimizar
+99:13
+vale las mismas que hemos especificado
+99:14
+aquí arriba se las especificamos aquí
+99:16
+abajo
+99:17
+unimos las dos con el zip aplicamos
+99:21
+gradientes y con esto estaríamos
+99:22
+optimizando el generador de la misma
+99:25
+manera vamos a hacer lo mismo
+99:26
+discriminador optimizer punto apply
+99:29
+grades zip discriminador rats y
+99:36
+discriminador training wood
+99:40
+ejecutamos esto ya ver cuántos errores
+99:42
+hay pues ninguno una extraña que no me
+99:44
+haya equivocado escribiendo esto vale
+99:46
+con esto ya tendremos especificado lo
+99:48
+que sería un paso en nuestro
+99:51
+entrenamiento al mismo tiempo pues
+99:53
+podríamos aprovechar para añadir print
+99:55
+si queremos visualizar cómo va
+99:57
+evolucionando las funciones de coste en
+100:00
+el tiempo etcétera en nuestro caso yo
+100:02
+creo que ya es suficiente y que lo que
+100:05
+nos interesaría ver es si el sistema se
+100:06
+va a entrenar o no se va a entrenar vale
+100:08
+si va a haber algún fallo o no entonces
+100:10
+para eso lo único que tenemos que hacer
+100:12
+pues va a ser llamar a la función train
+100:15
+que tenemos aquí arriba sobre el data
+100:17
+set de entrenamiento vale y vamos a
+100:20
+dejar que el sistema se vaya entrenando
+100:22
+poco a poco vamos a especificar le unas
+100:25
+100 épocas
+100:26
+aquí tienen una serie de parámetros que
+100:28
+pueden ir ajustando por ejemplo esto de
+100:30
+aquí si quieren indicar pues cuántas
+100:32
+cada cuántas épocas quieres guardarte un
+100:35
+checkpoint de seguridad
+100:37
+yo en mi caso lo voy a dejar a 50 porque
+100:39
+porque no necesita ahora mismo le damos
+100:42
+aquí y vamos a ver si la cosa funciona
+100:47
+vaya esto no está definido el gradiente
+100:50
+jpp en la línea aquí arriba vale me
+100:53
+faltará un importe no me falta un tensor
+100:56
+flow y un tensor ejecutamos de nuevo
+101:00
+ejecutamos de nuevo
+101:03
+y ejecutamos de nuevo
+101:08
+brading tape object no tiene atributos
+101:11
+gradientes writing tape
+101:15
+vamos a quitarle la s
+101:22
+vale ahora parece que sí está
+101:24
+funcionando la cosa de nuevo
+101:27
+donde ha saltado ahora en el discrimen
+101:29
+it or the screen editor tech grade
+101:31
+dientes
+101:33
+ah vale el que todo lo s donde no debía
+101:34
+aquí arriba vale
+101:39
+vamos a ejecutar de nuevo
+101:43
+parecería que ahora sí está funcionando
+101:45
+el sistema
+101:47
+he puesto 400 imágenes pues va a tardar
+101:49
+un poco en ejecutarse de hecho voy a
+101:52
+parar un momento esto y vamos a hacer un
+101:54
+cambio estético que va a ser meter el
+101:56
+clear output dentro del bucle del foro
+101:59
+para que no se vaya sumando esto sino
+102:01
+que se vaya desapareciendo el texto y
+102:03
+sea más fácil de leer en los 300 creo
+102:08
+mejor recuerden que es importante tener
+102:11
+el entorno de ejecución puesto en gpu
+102:13
+para que las cosas se acelere por
+102:16
+hardware y sea mucho más rápido el
+102:18
+entrenamiento de hecho vamos a poner una
+102:20
+última cosa que me acabo de acordar que
+102:21
+les dije que íbamos a tratar y es que si
+102:23
+se acuerdan antes les comenté que
+102:26
+podríamos decorar funciones con este con
+102:29
+este con esta etiqueta de aquí vale esto
+102:32
+lo que te permite es que el sistema en
+102:33
+vez de ejecutarse en y vermont se
+102:35
+ejecute en auto gran vale que haga el
+102:38
+gráfico computacional y te optimice todo
+102:40
+tu código esto se lo podríamos ir
+102:41
+rascando a cada una de las funciones y
+102:43
+si se pudiera optimizar pues se
+102:45
+optimizaría lo cual siempre está bien
+102:47
+pero lo vuelve tensor flow es que si tú
+102:49
+esto se lo aplica a una función que va a
+102:52
+llamar a otras funciones automáticamente
+102:54
+pues por esta dependencia que existe en
+102:56
+el df punto function se va a aplicar a
+102:59
+todas las funciones en cascada esto lo
+103:01
+que vamos a hacer es venirnos para acá y
+103:02
+le vamos a aplicar este decorador
+103:06
+y vamos a aplicar aquí a nuestro amigo
+103:09
+train step del cual surgen del resto de
+103:11
+funciones de nuestros sistemas con lo
+103:13
+cual con suerte a lo mejor el
+103:15
+entrenamiento ahora va un poquito más
+103:17
+rápido antes de darle debemos de
+103:19
+actualizar una cosita aquí y es que el
+103:22
+directorio le vamos a ir guardando las
+103:23
+imágenes le faltaba una barra para tener
+103:25
+la dirección bien especificada y al
+103:29
+mismo tiempo yo me dado cuenta que como
+103:30
+jane output tengo muchos archivos de
+103:33
+otras pruebas que ido haciendo en vez de
+103:36
+sobre escribirlo y que se tengan que
+103:37
+sincronizar con google drive prefiero
+103:39
+crear una carpeta aparte por eso ha
+103:41
+creado un directorio ya en google drive
+103:43
+que se llama un output ve y ahí va a ser
+103:46
+donde vaya colocando yo las nuevas
+103:47
+imágenes que se generen vamos a darle
+103:49
+para que se guarde vamos a darle aquí
+103:50
+también porque es gratis y aquí también
+103:54
+hace falta modificar esta línea hay que
+103:56
+coger y no la llama aquí abajo y también
+103:58
+tenemos que poner aquí abajo
+104:00
+img y
+104:02
+más igual uno para ir incrementando el
+104:05
+índice de las imágenes que estamos
+104:06
+utilizando para guardar los archivos
+104:09
+porque si no estaríamos tomando el
+104:11
+índice de la del bucle anterior y
+104:13
+fallaría pues todo estrepitosamente
+104:16
+vamos a darle y ahora sí que sí vamos a
+104:18
+comprobar si utilizando t efe punto
+104:20
+function en la ejecución prueba va mucho
+104:22
+más si va mucho más ágil vale y podemos
+104:26
+ver que efectivamente la cosa va mejor
+104:28
+que antes no está obviamente mejor y en
+104:30
+parte tiene sentido porque al final el
+104:32
+df punto function lo que va a hacer es
+104:34
+decir oye déjame tu grafo computacional
+104:37
+dame todas tus operaciones que te las
+104:38
+voy a compilar y te las voy a optimizar
+104:40
+para que pueda ir lo más rápido posible
+104:43
+entonces lo hemos hecho lo hemos
+104:44
+colocado casi en la raíz de toda la
+104:47
+ejecución que se está haciendo porque de
+104:48
+esta función salen todo el resto de
+104:51
+funciones de nuestro sistema y como
+104:53
+podemos ver pues esto se va ejecutando
+104:55
+correctamente poco a poco el generador
+104:59
+va aprendiendo a generar mejores
+105:00
+imágenes como podemos ver aquí además de
+105:03
+que tengo en cuenta que estas que
+105:04
+estamos visualizando son
+105:06
+las que vienen del data set de prueba lo
+105:08
+podemos ver aquí
+105:09
+esto significa que nuestro modelo está
+105:10
+aprendiendo a generar el resultado que
+105:12
+queremos con imágenes que no ha visto
+105:14
+anteriormente y esto está pues bastante
+105:17
+bien vale si nos venimos a google drive
+105:19
+pues también podemos comprobar como el
+105:21
+output ve se van guardando poco a poco
+105:24
+las imágenes que se van generando esto
+105:25
+depende un poco de cuánto tarde de
+105:27
+sincronizarse google drive y nada más en
+105:31
+principio cuando todo vaya avanzando
+105:33
+también deberían de ir apareciendo los
+105:35
+checkpoints que están guardando así que
+105:37
+en caso de que haya algún fallo pues
+105:39
+puedes recuperar tu entrenamiento y en
+105:42
+principio pues ahora deberían de dejar
+105:44
+tu sistema de ejecutar por un periodo
+105:46
+largo de tiempo esto puede variar
+105:48
+dependiendo del tipo de problema que
+105:50
+quieras afrontar cuanto tanto se está
+105:51
+utilizando etcétera yo por ejemplo con
+105:54
+este data set he hecho pruebas y por
+105:57
+ejemplo con unos 400 imágenes de
+105:59
+entrenamiento lo cual pues tardaría 10
+106:01
+veces más que la ejecución que estamos
+106:03
+haciendo ahora
+106:05
+he tardado en cumplir unas 300 400
+106:08
+épocas unas 56 horas y con eso haya
+106:12
+empezado a obtener algunos resultados
+106:13
+bastante aceptables al menos para el
+106:16
+tipo de problema que estamos teniendo
+106:18
+que resolver entonces dependiendo del
+106:20
+tipo de problema que tú quieras afrontar
+106:22
+si es para la competición o para
+106:23
+cualquier otra cosa aquí por ejemplo en
+106:26
+el paper te ponen diferentes tipos de
+106:27
+problemas que ellos han probado y
+106:29
+cuántas imágenes de entrenamiento han
+106:31
+utilizado cuántas épocas no han
+106:32
+entrenado con qué bad size cuánto ha
+106:34
+tardado etcétera vale con lo cual esto
+106:36
+está muy bien echarle un vistazo si esto
+106:39
+lo dejaban entrenar durante un ratito
+106:41
+éste no esté de aquí si esto lo dejan
+106:43
+entrenar durante un ratito pues podrán
+106:45
+obtener finalmente resultados como éste
+106:55
+[Música]
+106:58
+i
+107:03
+[Música]
+107:15
+y
+107:18
+como ven tras haber entrenado a nuestro
+107:20
+sistema durante varias horas pues
+107:22
+podemos empezar a obtener resultados
+107:23
+medianamente realistas que podrían
+107:26
+parecer flores sobre todo si lo ves a
+107:28
+diez metros de distancia vale aquí esto
+107:31
+no sería un punto final sino que sería
+107:32
+realmente el comienzo para empezar a
+107:34
+experimentar yo aquí me plantearía si a
+107:37
+lo mejor mi data set pues tiene que
+107:39
+depurarse un poco y quitar algunas
+107:41
+flores que no son representativas del
+107:43
+data set en el que el fondo a lo mejor
+107:44
+está mezclado o no pues no aparece en
+107:47
+hojas sino que aparece el cielo aparece
+107:49
+en ladrillos a lo mejor plantas que no
+107:51
+son del estilo que quiero yo a lo mejor
+107:53
+estoy buscando plantas redondas y hay
+107:54
+plantas alargadas a lo mejor mi
+107:56
+arquitectura le podría introducir algún
+107:58
+cambio que la mejorara que fuera más
+108:00
+óptima a lo mejor mi código tiene algún
+108:02
+fallo también habría que verlo a lo
+108:04
+mejor ha salido una arquitectura mejor y
+108:05
+podría aprobarla o ajustar mejor más
+108:07
+hiper parámetros como ven hay muchísimas
+108:10
+cosas que se pueden hacer y esta es
+108:11
+solamente el comienzo de empezar a
+108:13
+trabajar con una arquitectura de declare
+108:15
+como ven el tutorial es complejo pero no
+108:18
+es complicado es decir hay muchas partes
+108:21
+funcionando y es muy importante saber
+108:22
+que esta parte
+108:23
+y conectarse e integrarse correctamente
+108:26
+pero el código en sí mismo entenderlo no
+108:28
+es tan complicado por eso les invito a
+108:31
+que hagan pruebas que lo toque en que
+108:32
+cambien cosas que prueben otro tipo de
+108:35
+datos y sobre todo que participen en la
+108:37
+competición que tenemos abierta y que va
+108:39
+a cerrar el 14 de septiembre donde
+108:40
+pueden ganar esta tarjeta gráfica lo
+108:42
+importante no es tanto la tarjeta
+108:43
+gráfica sino que se enfrenten a un
+108:45
+problema real planteado por ustedes con
+108:48
+esto espero que hayan disfrutado del
+108:49
+tutorial que hayan aprendido mucho y ya
+108:51
+saben si este contenido lo valoran de
+108:53
+verdad si ven que esto les está
+108:55
+aportando conocimiento que realmente
+108:57
+tiene valor para vuestra vida
+108:58
+profesional y vuestra autoestima y
+109:00
+autorrealización y estas cositas pues
+109:03
+sepan que pueden apoyar al canal de
+109:04
+youtube a través de patrón ya somos 120
+109:07
+patrones es una auténtica pasada lo
+109:09
+agradezco muchísimo y además a partir de
+109:11
+septiembre vamos a empezar con un chat
+109:13
+de telegram privado para todos los que
+109:15
+sean patrios para que puedan tener un
+109:17
+canal de comunicación más cercano
+109:18
+conmigo y podemos compartir cosillas por
+109:20
+ahí a partir de ahí pues nada sepan que
+109:22
+12 se sigue de vacaciones y que
+109:25
+volveremos el 15 de septiembre cuando
+109:27
+cerremos ya la competición vale les
+109:29
+animo a participar que
+109:30
+del verano y nos vemos en la tercera
+109:32
+temporada de 12 s 1
